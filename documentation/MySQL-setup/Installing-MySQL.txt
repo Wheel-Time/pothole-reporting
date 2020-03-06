@@ -1,0 +1,13 @@
+Start by downloading the mySQL installer from https://dev.mysql.com/downloads/installer/. The current version should be 8.0.19.
+
+Run the installer. You may be prompted to apply an option mySQL installer upgrade, I'm not sure if this matters much. I chose to install the updgrade.
+
+On 'Choosing a Setup Type', select Developer Default. This should install everything you need to run mySQL locally, as well as MySQL workbench, which will make it easy to work on our database.
+
+On 'Check requirements', click 'Execute' and run through the installation of all required programs before clicking 'Next'.
+
+On 'Installation', click 'Execute' to install all products required for development. If any installations fail, click 'Retry'.
+
+See how to start/stop running a MySQL server here: https://dev.mysql.com/doc/refman/8.0/en/windows-start-command-line.html. If this doesn't work, MySQL server 8.0 might not be installed. In this case, run the installer again and install MySQL Servers -> MySQL Server -> MySQL Server 8.0.19
+
+Once you complete the installation process, you should be able to open MySQL workbench and log into 'Local instance MySQL80'
