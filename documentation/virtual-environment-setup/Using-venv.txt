@@ -1,0 +1,24 @@
+Make sure Python and pip are installed:
+    python -V
+    pip -V
+
+Create a virtual environment using venv in the env folder (venv requires Python >= 3.3):
+    python -m venv env
+
+Activate the environment:
+    Windows:
+        env\Scripts\activate.bat
+
+    Unix / MacOS:
+        source env/bin/activate
+
+You should now have (env) in front of your directory in the terminal
+
+To install necessary project packages once the virtual environment is activated:
+    pip install -r requirements.txt
+
+If you've installed new dependencies via pip, then:
+    pip freeze > requirements.txt
+
+This will copy all package dependencies into requirements.txt, so they can be maintained
+in version control and anyone running the program can install them with above commands.
