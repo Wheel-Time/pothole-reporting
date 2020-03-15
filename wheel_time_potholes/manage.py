@@ -2,9 +2,14 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import database as db
 
 
 def main():
+    if (db.connection is None):
+        print('Database connection failed')
+        return
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'wheel_time_potholes.settings')
     try:
         from django.core.management import execute_from_command_line
@@ -15,7 +20,7 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
     execute_from_command_line(sys.argv)
-
+    db.connection.close()
 
 if __name__ == '__main__':
     main()
