@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS pothole_reporting;
 
-CREATE DATABASE pothole_reporting;
+CREATE DATABASE pothole_reporting CHARACTER SET utf8;
 
 USE pothole_reporting;
 
