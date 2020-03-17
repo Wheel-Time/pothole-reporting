@@ -4,5 +4,19 @@
     <meta charset="UTF-8" />
     <title>Geotagged Pothole Image Submission</title>
   </head>
-  <body></body>
+  <body>
+    <form
+      action="/pothole-picture/"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      {% csrf_token %}
+      <table>
+        {{ form }}
+      </table>
+      <input type="submit" value="Submit picture" />
+      <br />
+        {{ text }}
+    </form>
+  </body>
 </html>
