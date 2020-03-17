@@ -1,0 +1,7 @@
+First make sure to properly set up your venv as described in virtual-environment-setup/Using-venv.txt
+
+Also make sure to set up your MySQL instance as described in Installing-MySQL.txt. MAKE SURE TO KEEP YOUR ROOT PASSWORD FOR YOU MYSQL INSTANCE
+
+Once you have installed all requirements and have created your MySQL instance, create a file in the wheel_time_potholes/wheel_time_potholes directory named "database_settings.py". In this file you need a single line that looks like the following:
+    password="YOUR_PASSWORD_HERE"
+where YOUR_PASSWORD_HERE is your MySQL root user password. This is to ensure that nobody's password gets committed, and that the prod password remains secret as well. Once that's set up, you should be able to run django without encountering any errors.
