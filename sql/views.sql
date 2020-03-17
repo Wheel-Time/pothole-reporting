@@ -9,7 +9,7 @@ SELECT
 				WHEN pl.state > 0
                 THEN 1
                 ELSE 0
-			END) > 5 -- reports until confirm
+			END) >= 5 -- reports until confirm
             THEN MIN(CASE
 				WHEN pl.state > 0
                 THEN pl.submit_date
@@ -31,9 +31,9 @@ SELECT
             ELSE '9999-12-31 23:59:59'
 		END AS 'fixed_date',
         SUM(CASE WHEN pl.state > 0 THEN 1 ELSE 0 END) AS 'pothole_reports',
-        SUM(CASE WHEN pl.state > 0 THEN 1 ELSE 0 END) AS 'fixed_reports'
+        SUM(CASE WHEN pl.state = 0 THEN 1 ELSE 0 END) AS 'fixed_reports'
 	FROM pothole_reporting.pothole p
-		LEFT JOIN pothole_reporting.pothole_ledger pl ON pl.pothole__id = p.id
+		LEFT JOIN pothole_reporting.pothole_ledger pl ON pl.fk_pothole_id = p.id
 	GROUP BY p.id, p.pothole_point, p.create_date;
 
 SELECT * FROM pothole_reporting.vw_pothole
