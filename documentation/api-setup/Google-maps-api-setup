@@ -1,0 +1,3 @@
+Create a file in the wheel_time_potholes/wheel_time_potholes directory named "api_settings.py" and add the following to the file:
+    maps_api_key="GOOGLE_MAPS_API_KEY_HERE"
+where GOOGLE_MAPS_API_KEY_HERE is our google maps api key that can be found in the maps api key doc in our team google drive folder.
