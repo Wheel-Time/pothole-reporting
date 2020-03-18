@@ -19,7 +19,7 @@ def process_image(image):
     image.verify()
 
     image_exif = image._getexif()
-    if not image_exif:
+    if image_exif is None:
         raise NoExifDataError("image has no exif data")
 
     gps_data = label_data(image_exif)['GPSInfo']
