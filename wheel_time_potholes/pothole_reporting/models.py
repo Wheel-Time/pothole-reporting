@@ -43,7 +43,7 @@ class SiteUser(models.Model):
 
 
 class VwPothole(models.Model):
-    id = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
     pothole_point = models.TextField()  # TODO: figure out proper field for points
     create_date = models.DateTimeField()
     effective_date = models.CharField(max_length=76, blank=True, null=True)

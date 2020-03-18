@@ -1,6 +1,8 @@
 from PIL import Image
 from PIL.ExifTags import TAGS
 
+from .exceptions import NoExifDataError
+
 
 def create_pothole_by_image(image):
     """
@@ -17,6 +19,9 @@ def process_image(image):
     image.verify()
 
     image_exif = image._getexif()
+    if not image_exif:
+        raise NoExifDataError("image has no exif data")
+
     gps_data = label_data(image_exif)['GPSInfo']
 
     # TODO: format gps data properly for db

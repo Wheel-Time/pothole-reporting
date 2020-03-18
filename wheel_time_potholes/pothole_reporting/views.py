@@ -4,6 +4,7 @@ from PIL import UnidentifiedImageError
 
 from .forms import PotholeImageForm
 from .geotag_image import create_pothole_by_image
+from .exceptions import NoExifDataError
 
 
 def index(request):
@@ -25,7 +26,7 @@ def pothole_picture(request):
             except UnidentifiedImageError:
                 print("Unable to open image")
                 text = "Unable to open the image"
-            except KeyError:
+            except (KeyError, NoExifDataError):
                 print("Image had no geotag data")
                 text = "Unable to get geo tag information from image. Make sure " \
                        "the image is a valid jpeg file with geo tag data."
