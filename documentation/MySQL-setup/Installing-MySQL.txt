@@ -10,4 +10,4 @@ On 'Installation', click 'Execute' to install all products required for developm
 
 See how to start/stop running a MySQL server here: https://dev.mysql.com/doc/refman/8.0/en/windows-start-command-line.html. If this doesn't work, MySQL server 8.0 might not be installed. In this case, run the installer again and install MySQL Servers -> MySQL Server -> MySQL Server 8.0.19
 
-Once you complete the installation process, you should be able to open MySQL workbench and log into 'Local instance MySQL80'
+Once you complete the installation process, you should be able to open MySQL workbench and log into 'Local instance MySQL80'. Make sure to save the root password for the database - you will need this for django-mysql connection. On this instance, run the files in the sql directory in the following order: pothole-database.sql -> views.sql -> seed-data.sql.
