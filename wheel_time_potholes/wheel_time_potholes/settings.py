@@ -124,3 +124,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Make api settings visible to apps
+
+MAP_API_KEY = api_settings.maps_api_key
