@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.conf import settings
 from PIL import UnidentifiedImageError
 
 from .forms import PotholeImageForm
@@ -8,7 +9,9 @@ from .exceptions import NoExifDataError
 
 
 def index(request):
-    return render(request, 'pothole_reporting/index.html')
+    return render(request,
+                  'pothole_reporting/index.html',
+                  {"api_key": settings.MAP_API_KEY})
 
 
 def pothole_picture(request):
@@ -36,6 +39,8 @@ def pothole_picture(request):
     else:  # GET request
         form = PotholeImageForm()
 
-    return render(request, 'pothole_reporting/pothole-picture.html', {'form': form,
-                                                                      'text': text})
+    return render(request,
+                  'pothole_reporting/pothole-picture.html',
+                  {'form': form,
+                   'text': text})
 
