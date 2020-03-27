@@ -2,7 +2,8 @@ DROP VIEW IF EXISTS vw_pothole;
 CREATE VIEW vw_pothole AS
 SELECT
 		p.id,
-        p.pothole_point,
+        p.lat,
+        p.lon,
         p.create_date,
         CASE -- need to add admin check
 			WHEN SUM(CASE
@@ -34,6 +35,6 @@ SELECT
         SUM(CASE WHEN pl.state = 0 THEN 1 ELSE 0 END) AS 'fixed_reports'
 	FROM pothole_reporting.pothole p
 		LEFT JOIN pothole_reporting.pothole_ledger pl ON pl.fk_pothole_id = p.id
-	GROUP BY p.id, p.pothole_point, p.create_date;
+	GROUP BY p.id, p.lat, p.lon, p.create_date;
 
 SELECT * FROM pothole_reporting.vw_pothole

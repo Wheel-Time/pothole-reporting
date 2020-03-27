@@ -10,7 +10,8 @@ from django.db import models
 # Generated using 'python manage.py inspectdb --include-views > models.py'
 # TODO: Properly configure all models. Maybe make a trello card?
 class Pothole(models.Model):
-    pothole_point = models.TextField()  # TODO: figure out proper field for points
+    lat = models.DecimalField(max_digits=19, decimal_places=16)
+    lon = models.DecimalField(max_digits=19, decimal_places=16)
     create_date = models.DateTimeField()
 
     class Meta:
@@ -44,7 +45,8 @@ class SiteUser(models.Model):
 
 class VwPothole(models.Model):
     id = models.IntegerField(primary_key=True)
-    pothole_point = models.TextField()  # TODO: figure out proper field for points
+    lat = models.DecimalField(max_digits=19, decimal_places=16)
+    lon = models.DecimalField(max_digits=19, decimal_places=16)
     create_date = models.DateTimeField()
     effective_date = models.CharField(max_length=76, blank=True, null=True)
     fixed_date = models.CharField(max_length=76, blank=True, null=True)
