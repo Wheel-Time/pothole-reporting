@@ -6,8 +6,8 @@ USE pothole_reporting;
 
 CREATE TABLE pothole (
 	id INT NOT NULL AUTO_INCREMENT,
-    lat DECIMAL(19, 16) NOT NULL,
-    lon DECIMAL(19, 16) NOT NULL,
+    lat DECIMAL(11, 8) NOT NULL,
+    lon DECIMAL(11, 8) NOT NULL,
     create_date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 );
