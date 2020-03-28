@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheel-Time Login</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="{% static 'pothole_reporting/css/signup.css' %}"
+    />
+</head>
+<body>
+    <div class="login-page">
+                <div class="form">
+                    <form action="{% url 'newSignup' %}" method="POST" class="register-form">
+                        {% csrf_token %}
+                        <p style="color: aliceblue;font-size: 20px;padding-top: 20px;">Sign Up</p>
+                        <input type="text" placeholder="First Name" />
+                        <input type="text" placeholder="Last Name" />
+                        <input type="email" placeholder="Email" />
+                        <input type="text" placeholder="UserName" />
+                        <input type="password" placeholder="Password" />
+                        <button>Create</button>>
+                        <p class="message"><span><input type="checkbox"></span> I agree to the terms of services</p>
+                        <p class="message" style="padding-bottom: 20px;">Already Registered? <a href="#"><u>Login</u></a></p>
+                    </form> 
+                </div>
+
+                <div class="form">
+                    <form action="{% url 'index' %}" method="POST" class="login-form">  <!-- route to homepage for now -->
+                        {% csrf_token %}
+                        <p style="color: aliceblue;font-size: 20px;padding-top: 20px;">Login</p>
+                        <input type="text" placeholder="UserName" />
+                        <input type="password" placeholder="Password" />
+                        <button>login</button>
+                        <p class="message" style="padding-bottom: 20px;"">Not Registered? <a href="#"><u>Register</u></a></p>
+                    </form>  
+                </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="{% static 'pothole_reporting/js/signup.js' %}"></script>
+</body>
+</html>

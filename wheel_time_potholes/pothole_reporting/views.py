@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from PIL import UnidentifiedImageError
@@ -6,13 +6,41 @@ from PIL import UnidentifiedImageError
 from .forms import PotholeImageForm
 from .geotag_image import create_pothole_by_image
 from .exceptions import NoExifDataError
+from .models import SiteUser
+
 
 
 def index(request):
     return render(request,
-                  'pothole_reporting/index.html',
-                  {"api_key": settings.MAP_API_KEY})
+                  "pothole_reporting/index.html")
 
+def signup(request):
+    return render(request,
+                  'signup_form/signup.html')
+
+def newSignup(request):
+    if request.method == "POST":
+        userName = request.POST.get("username")
+        fName = request.POST.get("first_name")
+        lName = request.POST.get("last_name")
+        eMail = request.POST.get("email")
+        pWord = request.POST.get("pword")
+
+        accepted_Admins = {"ipoulin@unomaha.edu","bishwokarki@unomaha.edu","emtriplett@unomaha.edu","fholzapfel@unomaha.edu"}
+
+        is_Admin = False
+
+        if eMail in accepted_Admins:
+            is_Admin = True
+
+        model_siteUser = SiteUser(username=userName,first_name=fName,last_name=lName,email=eMail,pword=pWord,is_admin=is_Admin)
+        model_siteUser.save()
+        return render(request,
+                   'pothole_reporting/index.html') #redirect to the homepage for now
+
+    else:
+        return redirect('newSignup')
+    
 
 def pothole_picture(request):
     text = ""
