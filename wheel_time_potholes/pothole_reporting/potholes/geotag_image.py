@@ -1,7 +1,7 @@
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-from .exceptions import NoExifDataError
+from pothole_reporting.exceptions import NoExifDataError
 
 
 def create_pothole_by_image(image):

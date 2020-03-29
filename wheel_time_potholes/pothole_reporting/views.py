@@ -1,10 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from PIL import UnidentifiedImageError
 
+from pothole_reporting.potholes.geotag_image import create_pothole_by_image
+from pothole_reporting.potholes.geo_potholes import get_geojson_potholes
 from .forms import PotholeImageForm
-from .geotag_image import create_pothole_by_image
 from .exceptions import NoExifDataError
 
 
@@ -44,3 +45,7 @@ def pothole_picture(request):
                   {'form': form,
                    'text': text})
 
+
+def pothole_geojson(request):
+    pothole_geojson = get_geojson_potholes(active=True)
+    return HttpResponse(pothole_geojson)
