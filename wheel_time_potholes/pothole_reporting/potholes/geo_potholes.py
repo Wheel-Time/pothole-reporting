@@ -21,7 +21,7 @@ def get_geojson_potholes(active=True):
     potholes = VwPothole.objects.all()
 
     pothole_features = [Feature(
-        geometry=Point((float(pothole.lat), float(pothole.lon)), precision=8),
+        geometry=Point((float(pothole.lon), float(pothole.lat)), precision=8),
         id=pothole.id,
         properties={"pothole_reports": int(pothole.pothole_reports),
                     "fixed_reports": int(pothole.fixed_reports),
