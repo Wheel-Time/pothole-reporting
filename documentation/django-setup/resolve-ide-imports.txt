@@ -1,0 +1,8 @@
+If you are on an IDE like PyCharm and are receiving import errors for modules within the project, then:
+
+File > Settings > Project:pothole-reporting > Project Structure:
+    Mark wheel_time_potholes, wheel_time_potholes/wheel_time_potholes, wheel_time_potholes/pothole_reporting
+    as source folders
+
+Even without the above change, you should still be able to run on command line,
+but resolving the errors fixes autocompletion in the IDE.
