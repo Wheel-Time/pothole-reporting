@@ -11,6 +11,10 @@ body {
   padding: 0;
 }
 
+#site-wrapper {
+    height: 95%;
+}
+
 .pothole-info {
   clear: both;
 }

@@ -2,14 +2,11 @@
 <html>
   <head>
     <title>{% block title %}Test{% endblock title %} | Pothole Reporting</title>
-    <!-- {% block head_favicon %}
-        <link rel="icon" type="image/png"
-              href="{{ STATIC_URL }}images/favicon.ico">
-    {% endblock head_favicon %} -->
+
     {% block head_meta %}
       {% block head_meta_charset %}
         <meta http-equiv="Content-Type"
-              content="text/html; charset=utf-8" />
+              content="charset=utf-8" />
       {% endblock head_meta_charset %}
       {% block head_meta_contentlanguage %}
         <meta http-equiv="Content-Language" value="en-US" />
@@ -19,6 +16,9 @@
               content="width=device-width, initial-scale=1.0">
       {% endblock head_meta_viewport %}
     {% endblock head_meta %}
+    {% block head_static %}
+
+    {% endblock head_static %}
     {% block head_css %}
       {% block head_css_site %}
         <link href="{{ STATIC_URL }}css/bootstrap.min.css"
@@ -34,7 +34,7 @@
   <body>
       <header>
         <div class="navbar">
-          Test
+          Test2 <br><br>test
         </div>
       </header>
       <div id="site-wrapper">

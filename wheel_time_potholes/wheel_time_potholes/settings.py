@@ -56,7 +56,7 @@ ROOT_URLCONF = 'wheel_time_potholes.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'pothole_reporting/templates/pothole_reporting')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

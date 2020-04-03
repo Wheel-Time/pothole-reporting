@@ -6,7 +6,7 @@ function initMap() {
     center: { lat: 41.2565, lng: -95.9345 },
     zoom: 16
   });
-
+  console.log(map);
   map.data.loadGeoJson("/pothole-geojson/");
 
   map.data.addListener("mouseover", function(event) {
