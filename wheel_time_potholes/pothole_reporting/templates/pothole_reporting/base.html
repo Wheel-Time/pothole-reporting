@@ -21,10 +21,9 @@
     {% endblock head_static %}
     {% block head_css %}
       {% block head_css_site %}
-        <link href="{{ STATIC_URL }}css/bootstrap.min.css"
-              rel="stylesheet" media="screen">
-        <link href="{{ STATIC_URL }}css/app.css"
-              rel="stylesheet" media="screen">
+        {% load static %}
+        <link href="{% static 'pothole_reporting/css/nav.css' %}"
+              rel="stylesheet">
       {% endblock head_css_site %}
       {% block head_css_page %}
 
@@ -32,11 +31,20 @@
     {% endblock head_css %}
   </head>
   <body>
-      <header>
+      <div class="header">
         <div class="navbar">
-          Test2 <br><br>test
+          <div class="nav-header">
+            <a href="/">Wheel Time Pothole Reporting</a>
+          </div>
+          <div class="nav-body">
+            <ul class="nav-list">
+              <li><a  href="/">Home</a></li>
+              <li><a  href="/">Submit</a></li>
+              <li><a  href="/">Sign up</a></li>
+            </ul>
+          </div>
         </div>
-      </header>
+      </div class="header">
       <div id="site-wrapper">
         {% block content %}
           This should not be visible

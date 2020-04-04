@@ -49,3 +49,6 @@ def pothole_picture(request):
 def pothole_geojson(request):
     pothole_geojson = get_geojson_potholes(active=True)
     return HttpResponse(pothole_geojson)
+
+def base_template(request, template='base.html'):
+  return direct_to_template(request, template)

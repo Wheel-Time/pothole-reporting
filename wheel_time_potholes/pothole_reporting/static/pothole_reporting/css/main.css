@@ -2,6 +2,8 @@
        * element that contains the map. */
 #map {
   height: 100%;
+  display: block;
+  clear: both;
 }
 /* Optional: Makes the sample page fill the window. */
 html,
@@ -9,10 +11,12 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: sans-serif;
 }
 
 #site-wrapper {
-    height: 95%;
+    height: 80%;
+    overflow: hidden;
 }
 
 .pothole-info {

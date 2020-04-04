@@ -6,12 +6,6 @@
 {% endblock head_static %}
 
 {% block head_css_page %}
-  <script src="{% static 'pothole_reporting/js/Map.js' %}"></script>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
-    async
-    defer
-  ></script>
   <link
     rel="stylesheet"
     href="{% static 'pothole_reporting/css/main.css' %}"
@@ -19,10 +13,16 @@
 {% endblock head_css_page %}
 
 {% block content %}
-  <div id="map" style="height: 75%;"></div>
+  <div id="map"></div>
 {% endblock content %}
 
 {% block footer_javascript_page %}
+  <script src="{% static 'pothole_reporting/js/Map.js' %}"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
+    async
+    defer
+  ></script>
 {% endblock footer_javascript_page %}
 <!--
 <!DOCTYPE html>
