@@ -32,18 +32,20 @@
   </head>
   <body>
       <div class="header">
-        <div class="navbar">
-          <div class="nav-header">
-            <a href="/">Wheel Time Pothole Reporting</a>
+        {% block header_content %}
+          <div class="navbar">
+            <div class="nav-header">
+              <a href="/">Wheel Time Pothole Reporting</a>
+            </div>
+            <div class="nav-body">
+              <ul class="nav-list">
+                <li><a  href="/">Sign up</a></li>
+                <li><a  href="/">Submit</a></li>
+                <li><a  href="/">Home</a></li>
+              </ul>
+            </div>
           </div>
-          <div class="nav-body">
-            <ul class="nav-list">
-              <li><a  href="/">Home</a></li>
-              <li><a  href="/">Submit</a></li>
-              <li><a  href="/">Sign up</a></li>
-            </ul>
-          </div>
-        </div>
+        {% endblock header_content %}
       </div class="header">
       <div id="site-wrapper">
         {% block content %}
@@ -51,7 +53,9 @@
         {% endblock content %}
       </div>
       <div class="footer">
-        Coptyright Wheel Time Systems
+        {% block footer_content %}
+          Copyright Wheel Time Systems
+        {% endblock footer_content %}
       </div>
   </body>
   {% block footer_javascript %}

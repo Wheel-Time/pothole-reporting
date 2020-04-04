@@ -6,15 +6,16 @@
 {% endblock head_static %}
 
 {% block head_css_page %}
-  <link
-    rel="stylesheet"
-    href="{% static 'pothole_reporting/css/main.css' %}"
-  />
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/main.css' %}"/>
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/index.css' %}"/>
 {% endblock head_css_page %}
 
 {% block content %}
   <div id="map"></div>
 {% endblock content %}
+
+{% block footer_content %}
+{% endblock footer_content %}
 
 {% block footer_javascript_page %}
   <script src="{% static 'pothole_reporting/js/Map.js' %}"></script>
