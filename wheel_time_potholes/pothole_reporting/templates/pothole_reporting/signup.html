@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    {% load static %}
+    <link
+      rel="stylesheet"
+      href="{% static 'pothole_reporting/css/signup.css' %}"
+    />
+</head>
+<body>
+    <div class="signup-page" style="margin-bottom: 20;">
+        <div class="form">
+            <form action="." method="POST" class="login-form" >
+                <p style="color: aliceblue;font-size: 20px;padding-top: 20px;">Sign Up</p>
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button>Create</button>>
+                <p class="message"><span><input type="checkbox"></span> I agree to the terms of services</p>
+                <p class="message">{{form.errors}}</p>
+                <p class="message" style="padding-bottom: 20px;">Already Registered? <a href="/login/"><u>Login</u></a></p> 
+            </form> 
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="{% static 'pothole_reporting/js/signup.js' %}"></script>
+</body>
+</html>
