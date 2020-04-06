@@ -1,9 +1,9 @@
 function initMap() {
   const infowindow = new google.maps.InfoWindow();
-  // centered on downtown Omaha
+  // centered on UNO
   // TODO: center according to where the user is actually located
   const map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 41.2565, lng: -95.9345 },
+    center: { lat: 41.258431, lng: -96.010453 },
     zoom: 16
   });
 

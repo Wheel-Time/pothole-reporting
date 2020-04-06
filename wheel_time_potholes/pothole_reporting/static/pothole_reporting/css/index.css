@@ -1,0 +1,17 @@
+/*Makes the map take up the rest of the page*/
+body {
+  display: flex;
+  flex-flow: column;
+}
+
+#site-wrapper {
+  flex-grow: 1;
+}
+
+/* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+#map {
+  height: 100%;
+  display: block;
+  clear: both;
+}

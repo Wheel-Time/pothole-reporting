@@ -1,22 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Pothole Reporting</title>
-    <meta name="viewport" content="initial-scale=1.0" />
-    <meta charset="utf-8" />
-    {% load static %}
-    <link
-      rel="stylesheet"
-      href="{% static 'pothole_reporting/css/main.css' %}"
-    />
-    <script src="{% static 'pothole_reporting/js/Map.js' %}"></script>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
-      async
-      defer
-    ></script>
-  </head>
-  <body>
-    <div id="map"></div>
-  </body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title %}
+
+{% block head_static %}
+  {% load static %}
+{% endblock head_static %}
+
+{% block head_css_page %}
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/main.css' %}"/>
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/index.css' %}"/>
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/map.css' %}"/>
+{% endblock head_css_page %}
+
+{% block content %}
+  <div id="map"></div>
+{% endblock content %}
+
+{% block footer_content %}
+{% endblock footer_content %}
+
+{% block footer_javascript_page %}
+  <script src="{% static 'pothole_reporting/js/Map.js' %}"></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
+    async
+    defer
+  ></script>
+{% endblock footer_javascript_page %}

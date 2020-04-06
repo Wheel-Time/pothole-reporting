@@ -1,0 +1,37 @@
+.navbar {
+  background-color: #333;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
+
+ul.nav-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.nav-body {
+  float: right;
+}
+
+.nav-header {
+  float:left;
+}
+
+.nav-list li{
+  float: right;
+}
+
+.nav-list li a, .nav-header a {
+  display: block;
+  text-align: center;
+  padding: 15px;
+  text-decoration: none;
+  color: white;
+}
+
+.nav-list li a:hover {
+  background-color: #111;
+}
