@@ -1,0 +1,27 @@
+Make sure to update your dependencies with pip install -r requirements.txt
+
+In your system's Users/YOU directory, create a folder named .aws
+Inside, create a file named config
+Add the following to config:
+
+[profile eb-cli]
+aws_access_key_id = KEY
+aws_secret_access_key = SECRET_KEY
+
+Where KEY and SECRET_KEY are the credentials for the IAM account associated with this project.
+
+From there, you should be able to run commands prefixed by eb. Some useful ones are:
+
+eb init:
+    initializes a project to hold the application in (this should only need to be run once for this project)
+
+eb create pothole-reporting-env:
+    creates the pothole-reporting application environment.
+
+eb deploy:
+    Updates the pothole-reporting-env application to the files currently found on your machine
+    If you are getting the error: ERROR   Your WSGIPath refers to a file that does not exist.
+    Then run:
+        eb config
+           Locate WSGIPath and change to: wheel_time_potholes/wheel_time_potholes/wsgi.py
+           Save and close the file, and it will update/redeploy automatically

@@ -97,3 +97,7 @@ venv.bak/
 yellowant_app_credentials.json
 
 .idea
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
