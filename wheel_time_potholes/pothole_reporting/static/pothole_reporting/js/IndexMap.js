@@ -1,5 +1,5 @@
 function initMap() {
-  const infowindow = new google.maps.InfoWindow();
+  const infoWindow = new google.maps.InfoWindow();
   // centered on UNO
   // TODO: center according to where the user is actually located
   const map = new google.maps.Map(document.getElementById("map"), {
@@ -23,9 +23,9 @@ function initMap() {
       feature.getProperty("fixed_reports") +
       "</p>" +
       "</div>";
-    infowindow.setContent(content);
-    infowindow.setPosition(event.feature.getGeometry().get());
-    infowindow.setOptions({ pixelOffset: new google.maps.Size(0, -30) });
-    infowindow.open(map);
+      infoWindow.setContent(content);
+      infoWindow.setPosition(event.feature.getGeometry().get());
+      infoWindow.setOptions({ pixelOffset: new google.maps.Size(0, -30) });
+      infoWindow.open(map);
   });
 }

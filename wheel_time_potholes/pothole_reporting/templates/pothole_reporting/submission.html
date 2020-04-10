@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock title %}
+{% block title %}Submission{% endblock title %}
 
 {% block head_static %}
   {% load static %}
@@ -7,7 +7,7 @@
 
 {% block head_css_page %}
   <link rel="stylesheet" href="{% static 'pothole_reporting/css/main.css' %}"/>
-  <link rel="stylesheet" href="{% static 'pothole_reporting/css/index.css' %}"/>
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/submission.css' %}"/>
   <link rel="stylesheet" href="{% static 'pothole_reporting/css/map.css' %}"/>
 {% endblock head_css_page %}
 
@@ -19,7 +19,9 @@
 {% endblock footer_content %}
 
 {% block footer_javascript_page %}
-  <script src="{% static 'pothole_reporting/js/IndexMap.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="{% static 'pothole_reporting/js/SubmissionMap.js' %}">
+  </script>
   <script
     src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
     async

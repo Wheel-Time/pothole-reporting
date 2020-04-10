@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
+from django.db import transaction, DatabaseError, IntegrityError
 from PIL import UnidentifiedImageError
+from datetime import datetime
 
 from pothole_reporting.potholes.geotag_image import create_pothole_by_image
 from pothole_reporting.potholes.geo_potholes import get_geojson_potholes
 from .forms import PotholeImageForm
+from .models import Pothole, PotholeLedger
 from .exceptions import NoExifDataError
 
 
@@ -15,13 +18,36 @@ def index(request):
                   {"api_key": settings.MAP_API_KEY})
 
 
+def submit_pothole(request):
+    if request.method == 'GET':
+        return render(request,
+                      'pothole_reporting/submission.html',
+                      {"api_key": settings.MAP_API_KEY})
+    elif request.method == 'POST':
+        req = request.POST
+        current_datetime = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+
+        pothole = Pothole(lat=req['lat'], lon=req['lon'], create_date=current_datetime)
+        # TODO: Replace fk_user_id with SiteUser object that is attached to request
+        p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=1, state=req['state'], submit_date=current_datetime)
+
+        try:
+            with transaction.atomic():
+                pothole.save()
+                p_ledger.save()
+        except (DatabaseError, IntegrityError):
+            print("Transaction failed")
+
+        return HttpResponse("SUCCESS")
+
+
 def pothole_picture(request):
     text = ""
 
     if request.method == 'POST':
         form = PotholeImageForm(request.POST, request.FILES)
-        if form.is_valid():
 
+        if form.is_valid():
             image = request.FILES['file']
             try:
                 create_pothole_by_image(image)
@@ -49,3 +75,8 @@ def pothole_picture(request):
 def pothole_geojson(request):
     pothole_geojson = get_geojson_potholes(active=True)
     return HttpResponse(pothole_geojson)
+
+
+# REMOVE
+def test_info_submission(request):
+    return render(request, 'pothole_reporting/test-submission.html')
