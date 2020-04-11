@@ -1,4 +1,5 @@
 var lat, lon, map, infoWindow, latLng;
+var icon_base = DJANGO_STATIC_URL + '/img/map-markers/';
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -7,6 +8,20 @@ function initMap() {
   });
 
   map.data.loadGeoJson("/pothole-geojson/");
+  map.data.setStyle(function(feature) {
+    let active = feature.getProperty("active");
+    let fixed = feature.getProperty("fixed");
+    let icon = icon_base;
+    if (active) {
+      icon += 'map-marker-confirmed.png';
+    } else if (fixed) {
+      icon += 'map-marker-fixed.png';
+    } else {
+      icon += 'map-marker-unconfirmed.png';
+    }
+
+    return {icon: icon};
+  });
 
   infoWindow = new google.maps.InfoWindow();
 
@@ -57,7 +72,7 @@ function initMap() {
     var content =
       '<div class="pothole-info">' +
       "<p>Active since: " +
-      feature.getProperty("date") +
+      feature.getProperty("effective_date") +
       "</p>" +
       '<p class="alignleft">Confirmations: ' +
       feature.getProperty("pothole_reports") +
@@ -77,6 +92,7 @@ function placeMarker(location) {
   var marker = new google.maps.Marker({
     position: location,
     map: map,
+    icon: icon_base + "map-marker-unconfirmed.png",
   });
 }
 

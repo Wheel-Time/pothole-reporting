@@ -94,6 +94,6 @@ def pothole_picture(request):
 
 
 def pothole_geojson(request):
-    pothole_geojson = get_geojson_potholes(active=True)
+    pothole_geojson = get_geojson_potholes(active=False) # change back to true later
     return HttpResponse(pothole_geojson)
 
