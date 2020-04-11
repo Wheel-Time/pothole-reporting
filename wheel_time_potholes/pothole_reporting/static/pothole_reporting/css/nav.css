@@ -17,14 +17,15 @@ ul.nav-list {
 }
 
 .nav-header {
-  float:left;
+  float: left;
 }
 
-.nav-list li{
+.nav-list li {
   float: right;
 }
 
-.nav-list li a, .nav-header a {
+.nav-list li a,
+.nav-header a {
   display: block;
   text-align: center;
   padding: 15px;

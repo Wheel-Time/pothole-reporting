@@ -1,15 +1,15 @@
 function initMap() {
-  const infowindow = new google.maps.InfoWindow();
+  const infoWindow = new google.maps.InfoWindow();
   // centered on UNO
   // TODO: center according to where the user is actually located
   const map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 41.258431, lng: -96.010453 },
-    zoom: 16
+    zoom: 16,
   });
 
   map.data.loadGeoJson("/pothole-geojson/");
 
-  map.data.addListener("mouseover", function(event) {
+  map.data.addListener("mouseover", function (event) {
     var feature = event.feature;
     var content =
       '<div class="pothole-info">' +
@@ -23,9 +23,9 @@ function initMap() {
       feature.getProperty("fixed_reports") +
       "</p>" +
       "</div>";
-    infowindow.setContent(content);
-    infowindow.setPosition(event.feature.getGeometry().get());
-    infowindow.setOptions({ pixelOffset: new google.maps.Size(0, -30) });
-    infowindow.open(map);
+    infoWindow.setContent(content);
+    infoWindow.setPosition(event.feature.getGeometry().get());
+    infoWindow.setOptions({ pixelOffset: new google.maps.Size(0, -30) });
+    infoWindow.open(map);
   });
 }

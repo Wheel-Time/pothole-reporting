@@ -1,0 +1,108 @@
+/*Makes the map take up the rest of the page*/
+body {
+  display: flex;
+  flex-flow: column;
+}
+
+#site-wrapper {
+  flex-grow: 1;
+}
+
+/* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+#map {
+  height: 100%;
+  display: block;
+  clear: both;
+}
+
+select:focus {
+  outline: none;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  overflow: hidden;
+  border: 0;
+  padding: 10px;
+}
+
+.severity-select {
+  outline: #686868 solid;
+  outline-width: 4px;
+  padding: 0 10px;
+  margin: 0 4px;
+  font-weight: bold;
+}
+
+.select-label {
+  vertical-align: top;
+  position: relative;
+  top: 8px;
+}
+
+.image-nav {
+  margin-right: 10px;
+  background-color: #00c4ff;
+  overflow: hidden;
+  float: left;
+  display: block;
+  text-align: center;
+  padding: 15px;
+  text-decoration: none;
+  color: white;
+}
+
+.image-nav:hover {
+  background-color: #54d7ff;
+}
+
+#picture-submit {
+  flex-grow: 0;
+}
+
+#state-select {
+  height: 50px;
+}
+
+#severity select option {
+  display: inline-block;
+}
+
+#severity {
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+#select-1:hover,
+#select-1:checked {
+  outline: #00ff00 solid;
+  outline-width: 4px;
+}
+
+#select-2:hover,
+#select-2:checked {
+  outline: #9fff00 solid;
+  outline-width: 4px;
+}
+
+#select-3:hover,
+#select-3:checked {
+  outline: #fff600 solid;
+  outline-width: 4px;
+}
+
+#select-4:hover,
+#select-4:checked {
+  outline: #ff7b00 solid;
+  outline-width: 4px;
+}
+
+#select-5:hover,
+#select-5:checked {
+  outline: #ff0000 solid;
+  outline-width: 4px;
+}
