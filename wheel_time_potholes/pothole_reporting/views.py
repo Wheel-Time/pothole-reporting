@@ -40,6 +40,27 @@ def submit_pothole(request):
 
         return HttpResponse("SUCCESS")
 
+def update_pothole(request):
+    if request.method == 'GET':
+        return render(request,
+                      'pothole_reporting/submission.html',
+                      {"api_key": settings.MAP_API_KEY})
+    elif request.method == 'POST':
+        req = request.POST
+        current_datetime = timezone.now()
+
+        pothole = Pothole.objects.get(id=request.POST['pothole_id'])
+        # TODO: Replace fk_user_id with SiteUser object that is attached to request
+        p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=1, state=req['state'], submit_date=current_datetime)
+
+        try:
+            with transaction.atomic():
+                pothole.save()
+                p_ledger.save()
+        except (DatabaseError, IntegrityError):
+            print("Transaction failed")
+
+        return HttpResponse("SUCCESS")
 
 def pothole_picture(request):
     text = ""
