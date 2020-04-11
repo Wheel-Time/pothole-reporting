@@ -7,7 +7,11 @@ function initMap() {
     zoom: 16,
   });
 
-  map.data.loadGeoJson("/pothole-geojson/");
+  map.data.setStyle({
+    icon: DJANGO_STATIC_URL + "/img/map-markers/map-marker-confirmed.png",
+  });
+
+  map.data.loadGeoJson("/pothole-geojson/?active=true");
 
   map.data.addListener("mouseover", function (event) {
     var feature = event.feature;

@@ -35,7 +35,10 @@ def get_geojson_potholes(active=True):
                     })
         for pothole in potholes
         # filter according to whether active is true
-        if (active and convert_timestamp(pothole.fixed_date) > datetime.now())
+        if (active
+            and pothole.effective_date is not None
+            and convert_timestamp(pothole.fixed_date) > datetime.now()
+            and convert_timestamp(pothole.effective_date) < datetime.now())
         or not active]
 
     pothole_collection = FeatureCollection(pothole_features)

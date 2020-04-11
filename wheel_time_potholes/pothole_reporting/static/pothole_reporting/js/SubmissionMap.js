@@ -7,7 +7,7 @@ function initMap() {
     zoom: 16,
   });
 
-  map.data.loadGeoJson("/pothole-geojson/");
+  map.data.loadGeoJson("/pothole-geojson/?active=false");
   map.data.setStyle(function(feature) {
     let active = feature.getProperty("active");
     let fixed = feature.getProperty("fixed");
@@ -70,10 +70,24 @@ function initMap() {
   map.data.addListener("mouseover", function (event) {
     var feature = event.feature;
     var content =
-      '<div class="pothole-info">' +
+      '<div class="pothole-info">';
+    if (feature.getProperty("active")) {
+      content +=
       "<p>Active since: " +
       feature.getProperty("effective_date") +
-      "</p>" +
+      "</p>";
+    } else if (feature.getProperty("fixed")) {
+      content +=
+      "<p>Fixed since: " +
+      feature.getProperty("fixed_date") +
+      "</p>";
+    } else {
+      content +=
+      "<p>Submitted: " +
+      feature.getProperty("create_date") +
+      "</p>";
+    }
+    content +=
       '<p class="alignleft">Confirmations: ' +
       feature.getProperty("pothole_reports") +
       "</p>" +
