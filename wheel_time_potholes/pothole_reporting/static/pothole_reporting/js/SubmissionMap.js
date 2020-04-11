@@ -1,6 +1,5 @@
 var lat, lon, map, infoWindow, latLng;
 
-
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 41.258431, lng: -96.010453 },
@@ -18,7 +17,7 @@ function initMap() {
       "<h4>Submit a new Pothole</h4>" +
       "<form " +
       'id="pothole-form" ' +
-      'action="/submit/" ' +
+      'action="{% url "submit" %}" ' +
       'method="post"' +
       ">" +
       '<div id="severity">' +
@@ -42,7 +41,7 @@ function initMap() {
     });
 
     infoWindow.setContent(content);
-    latLng = mapsMouseEvent.latLng
+    latLng = mapsMouseEvent.latLng;
     lat = latLng.lat();
     lon = latLng.lng();
 
@@ -50,14 +49,12 @@ function initMap() {
   });
 }
 
-
 function placeMarker(location) {
   var marker = new google.maps.Marker({
-      position: location, 
-      map: map
+    position: location,
+    map: map,
   });
 }
-
 
 function onSubmit(event) {
   //Append lat, long, and csrf token from click to form submission
@@ -68,11 +65,11 @@ function onSubmit(event) {
       state: $("#state-select").val(),
       lat: lat,
       lon: lon,
-    }
+    };
 
     $.ajax({
-      type: 'POST',
-      url: '/submit/',
+      type: "POST",
+      url: "/submit/",
       data: potholeData,
       beforeSend: function (xhr, settings) {
         // get the cookie in order to extract the csrf token
@@ -101,10 +98,11 @@ function onSubmit(event) {
         placeMarker(latLng);
         infoWindow.close();
       },
-      error: function(data) {
-        alert("Failure, please make sure you have selected a severity level for this pothole");
-      }
-
-    })
+      error: function (data) {
+        alert(
+          "Failure, please make sure you have selected a severity level for this pothole"
+        );
+      },
+    });
   });
 }

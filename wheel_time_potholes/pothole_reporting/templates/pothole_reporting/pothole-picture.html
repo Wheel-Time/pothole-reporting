@@ -1,22 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Geotagged Pothole Image Submission</title>
-  </head>
-  <body>
-    <form
-      action="/pothole-picture/"
-      method="post"
-      enctype="multipart/form-data"
-    >
-      {% csrf_token %}
-      <table>
-        {{ form }}
-      </table>
-      <input type="submit" value="Submit picture" />
-      <br />
-        {{ text }}
-    </form>
-  </body>
-</html>
+{% extends 'base.html' %}
+{% block title %}Geotagged Pothole Image Submission{% endblock title %}
+
+{% block head_static %}
+  {% load static %}
+{% endblock head_static %}
+
+{% block head_css_page %}
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/main.css' %}"/>
+{% endblock head_css_page %}
+
+{% block content %}
+  <form
+  action="{% url 'pothole-picture' %}"
+  method="post"
+  enctype="multipart/form-data"
+  >
+  {% csrf_token %}
+  <table>
+    {{ form }}
+  </table>
+  <input type="submit" value="Submit picture" />
+  <br />
+    {{ text }}
+  </form>
+{% endblock content %}
+
+{% block footer_content %}
+{% endblock footer_content %}
+
+{% block footer_javascript_page %}
+{% endblock footer_javascript_page %}
+

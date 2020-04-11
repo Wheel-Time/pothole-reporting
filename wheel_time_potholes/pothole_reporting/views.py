@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from django.db import transaction, DatabaseError, IntegrityError
+from django.utils import timezone
 from PIL import UnidentifiedImageError
-from datetime import datetime
 
 from pothole_reporting.potholes.geotag_image import create_pothole_by_image
 from pothole_reporting.potholes.geo_potholes import get_geojson_potholes
@@ -25,7 +25,7 @@ def submit_pothole(request):
                       {"api_key": settings.MAP_API_KEY})
     elif request.method == 'POST':
         req = request.POST
-        current_datetime = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+        current_datetime = timezone.now()
 
         pothole = Pothole(lat=req['lat'], lon=req['lon'], create_date=current_datetime)
         # TODO: Replace fk_user_id with SiteUser object that is attached to request
@@ -76,7 +76,3 @@ def pothole_geojson(request):
     pothole_geojson = get_geojson_potholes(active=True)
     return HttpResponse(pothole_geojson)
 
-
-# REMOVE
-def test_info_submission(request):
-    return render(request, 'pothole_reporting/test-submission.html')

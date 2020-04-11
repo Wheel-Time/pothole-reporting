@@ -26,7 +26,7 @@ select {
   background-color: transparent;
   overflow: hidden;
   border: 0;
-  padding:10px;
+  padding: 10px;
 }
 
 .severity-select {
@@ -38,9 +38,29 @@ select {
 }
 
 .select-label {
-  vertical-align:top;
+  vertical-align: top;
   position: relative;
   top: 8px;
+}
+
+.image-nav {
+  margin-right: 10px;
+  background-color: #00c4ff;
+  overflow: hidden;
+  float: left;
+  display: block;
+  text-align: center;
+  padding: 15px;
+  text-decoration: none;
+  color: white;
+}
+
+.image-nav:hover {
+  background-color: #54d7ff;
+}
+
+#picture-submit {
+  flex-grow: 0;
 }
 
 #state-select {
@@ -48,41 +68,41 @@ select {
 }
 
 #severity select option {
-  display:inline-block;
+  display: inline-block;
 }
 
 #severity {
-  display:inline-block;
-  vertical-align:top;
-  overflow:hidden;
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
 }
 
 #select-1:hover,
- #select-1:checked{
-  outline: #00FF00 solid;
+#select-1:checked {
+  outline: #00ff00 solid;
   outline-width: 4px;
 }
 
 #select-2:hover,
 #select-2:checked {
-  outline: #9FFF00 solid;
+  outline: #9fff00 solid;
   outline-width: 4px;
 }
 
 #select-3:hover,
 #select-3:checked {
-  outline: #FFF600 solid;
+  outline: #fff600 solid;
   outline-width: 4px;
 }
 
 #select-4:hover,
 #select-4:checked {
-  outline: #FF7B00 solid;
+  outline: #ff7b00 solid;
   outline-width: 4px;
 }
 
 #select-5:hover,
 #select-5:checked {
-  outline: #FF0000 solid;
+  outline: #ff0000 solid;
   outline-width: 4px;
 }

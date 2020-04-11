@@ -11,8 +11,15 @@
   <link rel="stylesheet" href="{% static 'pothole_reporting/css/map.css' %}"/>
 {% endblock head_css_page %}
 
+{% block subheader_content %}
+  <div id="picture-submit">
+    <a class="image-nav" href="{% url 'pothole-picture' %}">Image Submission</a>
+    <p class="alignleft">Click here to submit a geotagged image of a pothole</p>    
+  </div>
+{% endblock subheader_content %}
+
 {% block content %}
-  <div id="map"></div>
+    <div id="map"></div>
 {% endblock content %}
 
 {% block footer_content %}
