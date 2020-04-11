@@ -6,8 +6,11 @@ function initMap() {
     zoom: 16,
   });
 
-  // Configure the click listener.
+  map.data.loadGeoJson("/pothole-geojson/");
+
   infoWindow = new google.maps.InfoWindow();
+
+  // Configure the click listener.
   map.addListener("click", function (mapsMouseEvent) {
     // Close the current InfoWindow.
     infoWindow.close();
@@ -45,6 +48,27 @@ function initMap() {
     lat = latLng.lat();
     lon = latLng.lng();
 
+    infoWindow.open(map);
+  });
+
+  // Configure the mouseover listener
+  map.data.addListener("mouseover", function (event) {
+    var feature = event.feature;
+    var content =
+      '<div class="pothole-info">' +
+      "<p>Active since: " +
+      feature.getProperty("date") +
+      "</p>" +
+      '<p class="alignleft">Confirmations: ' +
+      feature.getProperty("pothole_reports") +
+      "</p>" +
+      '<p class="alignright">Fixed: ' +
+      feature.getProperty("fixed_reports") +
+      "</p>" +
+      "</div>";
+    infoWindow.setContent(content);
+    infoWindow.setPosition(event.feature.getGeometry().get());
+    infoWindow.setOptions({ pixelOffset: new google.maps.Size(0, -30) });
     infoWindow.open(map);
   });
 }
