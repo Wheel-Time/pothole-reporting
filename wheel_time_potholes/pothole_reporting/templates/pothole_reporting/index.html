@@ -25,4 +25,23 @@
     async
     defer
   ></script>
+  <script type="text/javascript">
+    function test(test) {
+      // console.log(map.data.getFeatureById(activeId).getProperty("id"));
+      // console.log(activeId);
+      $.ajax({
+        type: "POST",
+        url: "{% url 'add-pothole-ledger-entry' %}",
+        data: {
+          csrfmiddlewaretoken: '{{ csrf_token }}',
+          pothole_id: activeId,
+          user_id: 1,
+          state: 5
+        },   /* Passing the text data */
+        success:  function(response){
+          console.log(response);
+        }
+      });
+    }
+  </script>
 {% endblock footer_javascript_page %}

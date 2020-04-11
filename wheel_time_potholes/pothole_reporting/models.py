@@ -23,7 +23,7 @@ class PotholeLedger(models.Model):
     fk_pothole = models.ForeignKey(Pothole, models.DO_NOTHING)
     fk_user = models.ForeignKey('SiteUser', models.DO_NOTHING)
     state = models.IntegerField()
-    submit_date = models.DateTimeField()
+    # submit_date = models.DateTimeField()
 
     class Meta:
         managed = False     # All pre-existing tables, so false should be kept UNLESS we want to generate from django

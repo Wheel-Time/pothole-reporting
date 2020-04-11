@@ -5,6 +5,7 @@ from PIL import UnidentifiedImageError
 
 from pothole_reporting.potholes.geotag_image import create_pothole_by_image
 from pothole_reporting.potholes.geo_potholes import get_geojson_potholes
+from pothole_reporting.models import PotholeLedger, Pothole, SiteUser
 from .forms import PotholeImageForm
 from .exceptions import NoExifDataError
 
@@ -49,3 +50,16 @@ def pothole_picture(request):
 def pothole_geojson(request):
     pothole_geojson = get_geojson_potholes(active=True)
     return HttpResponse(pothole_geojson)
+
+def add_pothole_ledger_entry(request):
+    pothole = Pothole.objects.get(id=request.POST['pothole_id'])
+    site_user = SiteUser.objects.get(id=request.POST['user_id'])
+
+    p = PotholeLedger.objects.create(
+        fk_pothole=pothole,
+        fk_user=site_user,
+        state=request.POST['state'])
+    return HttpResponse(request)
+
+def ajax_test(request):
+    return HttpResponse(request.POST['id'])
