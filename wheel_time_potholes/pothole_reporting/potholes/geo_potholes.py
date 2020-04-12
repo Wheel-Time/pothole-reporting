@@ -31,7 +31,8 @@ def get_geojson_potholes(active=True):
                                 and convert_timestamp(pothole.effective_date) < datetime.now()
                                 and convert_timestamp(pothole.fixed_date) > datetime.now(),
                     "fixed_date": str(pothole.fixed_date),
-                    "fixed": pothole.fixed_date and convert_timestamp(pothole.fixed_date) < datetime.now()
+                    "fixed": pothole.fixed_date and convert_timestamp(pothole.fixed_date) < datetime.now(),
+                    "severity": str(pothole.avg_severity),
                     })
         for pothole in potholes
         # filter according to whether active is true

@@ -1,5 +1,6 @@
 var lat, lon, map, infoWindow, latLng;
 var icon_base = DJANGO_STATIC_URL + '/img/map-markers/';
+var activeFeature = null;
 
 function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
@@ -28,6 +29,7 @@ function initMap() {
   // Configure the click listener.
   map.addListener("click", function (mapsMouseEvent) {
     // Close the current InfoWindow.
+    activeFeature = null;
     infoWindow.close();
 
     var content =
@@ -69,8 +71,10 @@ function initMap() {
   // Configure the mouseover listener
   map.data.addListener("mouseover", function (event) {
     var feature = event.feature;
+    activeFeature = feature;
     var content =
-      '<div class="pothole-info">';
+      "<div class='pothole-info' id='pothole-" + feature.getId() + "'>" +
+      '<div class="row">';
     if (feature.getProperty("active")) {
       content +=
       "<p>Active since: " +
@@ -94,6 +98,11 @@ function initMap() {
       '<p class="alignright">Fixed: ' +
       feature.getProperty("fixed_reports") +
       "</p>" +
+      "</div>" +
+      "<div class='row'>" +
+      '<input onclick="return onUpdate(this);" class="alignleft" id="confirm-button" type="submit" value="Confirm"/>' +
+      '<input onclick="return onUpdate(this, true);" class="alignright" id="fixed-button" type="submit" value="Fixed"/>' +
+      "</div>" +
       "</div>";
     infoWindow.setContent(content);
     infoWindow.setPosition(event.feature.getGeometry().get());
@@ -107,6 +116,59 @@ function placeMarker(location) {
     position: location,
     map: map,
     icon: icon_base + "map-marker-unconfirmed.png",
+  });
+}
+
+function onUpdate(event, fixed=false) {
+  let potholeData;
+  if (fixed) {
+    potholeData = {
+      pothole_id: activeFeature.getId(),
+      state: 0,
+    }
+  } else {
+    potholeData = {
+      pothole_id: activeFeature.getId(),
+      state: 5,
+    }
+  }
+
+  $.ajax({
+    type: "POST",
+    url: "/update/",
+    data: potholeData,
+    beforeSend: function (xhr, settings) {
+      // get the cookie in order to extract the csrf token
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != "") {
+          var cookies = document.cookie.split(";");
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+      // add the csrf token to the submission header
+      xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+    },
+    success: function (data) {
+      alert("Success");
+      placeMarker(latLng);
+      infoWindow.close();
+    },
+    error: function (data) {
+      alert(
+        "Failure, please make sure you have selected a severity level for this pothole"
+      );
+    },
   });
 }
 
