@@ -100,7 +100,7 @@ function initMap() {
       "</p>" +
       "</div>" +
       "<div class='row'>" +
-      '<input onclick="return onUpdate(this);" class="alignleft" id="confirm-button" type="submit" value="Confirm"/>' +
+      '<input onclick="return onConfirm(this);" class="alignleft" id="confirm-button" type="submit" value="Confirm"/>' +
       '<input onclick="return onUpdate(this, true);" class="alignright" id="fixed-button" type="submit" value="Fixed"/>' +
       "</div>" +
       "</div>";
@@ -119,6 +119,26 @@ function placeMarker(location) {
   });
 }
 
+function onConfirm(event) {
+  let content =
+      '<div class="submission-window">' +
+      "<h4>Submit a new Pothole</h4>" +
+      '<div id="severity">' +
+      '<label class="select-label">Severity:</label>' +
+      '<select id="state-select" name="state" size="5">' +
+      '<option class="severity-select" id="select-1" value=1>1</option>' +
+      '<option class="severity-select" id="select-2" value=2>2</option>' +
+      '<option class="severity-select" id="select-3" value=3>3</option>' +
+      '<option class="severity-select" id="select-4" value=4>4</option>' +
+      '<option class="severity-select" id="select-5" value=5>5</option>' +
+      "</select>" +
+      "</div>" +
+      "<br/>" +
+      '<input onclick="return onUpdate(this);" class="alignright" id="submit-button" type="submit" value="Submit pothole"/>' +
+      "</div>";
+  $(event).parent().parent().html(content)
+}
+
 function onUpdate(event, fixed=false) {
   let potholeData;
   if (fixed) {
@@ -129,7 +149,7 @@ function onUpdate(event, fixed=false) {
   } else {
     potholeData = {
       pothole_id: activeFeature.getId(),
-      state: 5,
+      state: $("#state-select").val(),
     }
   }
 
