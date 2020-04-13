@@ -25,10 +25,22 @@ def get_geojson_potholes(active=True):
         id=pothole.id,
         properties={"pothole_reports": int(pothole.pothole_reports),
                     "fixed_reports": int(pothole.fixed_reports),
-                    "date": str(pothole.create_date)})
+                    "create_date": str(pothole.create_date),
+                    "effective_date": str(pothole.effective_date),
+                    "active": pothole.effective_date is not None
+                                and convert_timestamp(pothole.effective_date) < datetime.utcnow()
+                                and convert_timestamp(pothole.fixed_date) > datetime.utcnow(),
+                    "fixed_date": str(pothole.fixed_date),
+                    "fixed": pothole.fixed_date and convert_timestamp(pothole.fixed_date) < datetime.utcnow(),
+                    "severity": str(pothole.avg_severity),
+                    "utcnow": str(datetime.utcnow())
+                    })
         for pothole in potholes
         # filter according to whether active is true
-        if (active and convert_timestamp(pothole.fixed_date) > datetime.now())
+        if (active
+            and pothole.effective_date is not None
+            and convert_timestamp(pothole.fixed_date) > datetime.utcnow()
+            and convert_timestamp(pothole.effective_date) < datetime.utcnow())
         or not active]
 
     pothole_collection = FeatureCollection(pothole_features)

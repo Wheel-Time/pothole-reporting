@@ -1,15 +1,41 @@
 var lat, lon, map, infoWindow, latLng;
+var icon_base = DJANGO_STATIC_URL + '/img/map-markers/';
+var activeFeature = null;
 
-function initMap() {
+function reloadGeoJson() {
+  map.data.forEach(function(feature) {
+    map.data.remove(feature);
+  });
+  map.data.loadGeoJson("/pothole-geojson/?active=false");
+  map.data.setStyle(function(feature) {
+    let active = feature.getProperty("active");
+    let fixed = feature.getProperty("fixed");
+    let icon = icon_base;
+    if (active) {
+      icon += 'map-marker-confirmed.png';
+    } else if (fixed) {
+      icon += 'map-marker-fixed.png';
+    } else {
+      icon += 'map-marker-unconfirmed.png';
+    }
+
+    return {icon: icon};
+  });
+}
+
+function initMap(latlng={ lat: 41.258431, lng: -96.010453 }) {
   map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 41.258431, lng: -96.010453 },
+    center: latlng,
     zoom: 16,
   });
 
-  // Configure the click listener.
+  reloadGeoJson();
   infoWindow = new google.maps.InfoWindow();
+
+  // Configure the click listener.
   map.addListener("click", function (mapsMouseEvent) {
     // Close the current InfoWindow.
+    activeFeature = null;
     infoWindow.close();
 
     var content =
@@ -47,12 +73,120 @@ function initMap() {
 
     infoWindow.open(map);
   });
+
+  // Configure the mouseover listener
+  map.data.addListener("mouseover", function (event) {
+    var feature = event.feature;
+    activeFeature = feature;
+    var content =
+      "<div class='pothole-info' id='pothole-" + feature.getId() + "'>" +
+      '<div class="row">';
+    if (feature.getProperty("active")) {
+      content +=
+      "<p>Active since: " +
+      feature.getProperty("effective_date") +
+      "</p>";
+    } else if (feature.getProperty("fixed")) {
+      content +=
+      "<p>Fixed since: " +
+      feature.getProperty("fixed_date") +
+      "</p>";
+    } else {
+      content +=
+      "<p>Submitted: " +
+      feature.getProperty("create_date") +
+      "</p>";
+    }
+    content +=
+      '<p class="alignleft">Confirmations: ' +
+      feature.getProperty("pothole_reports") +
+      "</p>" +
+      '<p class="alignright">Fixed: ' +
+      feature.getProperty("fixed_reports") +
+      "</p>" +
+      "</div>" +
+      "<div class='row'>" +
+      '<input onclick="return onConfirm(this);" class="alignleft" id="confirm-button" type="submit" value="Confirm"/>' +
+      '<input onclick="return onUpdate(this, true);" class="alignright" id="fixed-button" type="submit" value="Fixed"/>' +
+      "</div>" +
+      "</div>";
+    infoWindow.setContent(content);
+    infoWindow.setPosition(event.feature.getGeometry().get());
+    infoWindow.setOptions({ pixelOffset: new google.maps.Size(0, -30) });
+    infoWindow.open(map);
+  });
 }
 
-function placeMarker(location) {
-  var marker = new google.maps.Marker({
-    position: location,
-    map: map,
+function onConfirm(event) {
+  let content =
+      '<div class="submission-window">' +
+      "<h4>Confirm this Pothole</h4>" +
+      '<div id="severity">' +
+      '<label class="select-label">Severity:</label>' +
+      '<select id="state-select" name="state" size="5">' +
+      '<option class="severity-select" id="select-1" value=1>1</option>' +
+      '<option class="severity-select" id="select-2" value=2>2</option>' +
+      '<option class="severity-select" id="select-3" value=3>3</option>' +
+      '<option class="severity-select" id="select-4" value=4>4</option>' +
+      '<option class="severity-select" id="select-5" value=5>5</option>' +
+      "</select>" +
+      "</div>" +
+      "<br/>" +
+      '<input onclick="return onUpdate(this);" class="alignright" id="submit-button" type="submit" value="Confirm pothole"/>' +
+      "</div>";
+  $(event).parent().parent().html(content)
+}
+
+function onUpdate(event, fixed=false) {
+  let potholeData;
+  if (fixed) {
+    potholeData = {
+      pothole_id: activeFeature.getId(),
+      state: 0,
+    }
+  } else {
+    potholeData = {
+      pothole_id: activeFeature.getId(),
+      state: $("#state-select").val(),
+    }
+  }
+
+  $.ajax({
+    type: "POST",
+    url: "/update/",
+    data: potholeData,
+    beforeSend: function (xhr, settings) {
+      // get the cookie in order to extract the csrf token
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != "") {
+          var cookies = document.cookie.split(";");
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1)
+              );
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+      // add the csrf token to the submission header
+      xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+    },
+    success: function (data) {
+      reloadGeoJson();
+      alert("Success");
+      infoWindow.close();
+    },
+    error: function (data) {
+      alert(
+        "Failure, please make sure you have selected a severity level for this pothole"
+      );
+    },
   });
 }
 
@@ -94,8 +228,8 @@ function onSubmit(event) {
         xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
       },
       success: function (data) {
+        reloadGeoJson();
         alert("Success");
-        placeMarker(latLng);
         infoWindow.close();
       },
       error: function (data) {

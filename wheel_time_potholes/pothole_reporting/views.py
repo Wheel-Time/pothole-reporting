@@ -40,6 +40,27 @@ def submit_pothole(request):
 
         return HttpResponse("SUCCESS")
 
+def update_pothole(request):
+    if request.method == 'GET':
+        return render(request,
+                      'pothole_reporting/submission.html',
+                      {"api_key": settings.MAP_API_KEY})
+    elif request.method == 'POST':
+        req = request.POST
+        current_datetime = timezone.now()
+
+        pothole = Pothole.objects.get(id=request.POST['pothole_id'])
+        # TODO: Replace fk_user_id with SiteUser object that is attached to request
+        p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=1, state=req['state'], submit_date=current_datetime)
+
+        try:
+            with transaction.atomic():
+                pothole.save()
+                p_ledger.save()
+        except (DatabaseError, IntegrityError):
+            print("Transaction failed")
+
+        return HttpResponse("SUCCESS")
 
 def pothole_picture(request):
     text = ""
@@ -73,6 +94,9 @@ def pothole_picture(request):
 
 
 def pothole_geojson(request):
-    pothole_geojson = get_geojson_potholes(active=True)
+    if request.method == 'GET':
+        active = request.GET.get('active')
+        active = (active is not None and active.lower() != "false")
+        pothole_geojson = get_geojson_potholes(active=active)
     return HttpResponse(pothole_geojson)
 
