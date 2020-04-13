@@ -96,10 +96,7 @@ def pothole_picture(request):
 def pothole_geojson(request):
     if request.method == 'GET':
         active = request.GET.get('active')
-        if active is not None and active.lower() != "false":
-            active = True
-        else:
-            active = False
+        active = (active is not None and active.lower() != "false")
         pothole_geojson = get_geojson_potholes(active=active)
     return HttpResponse(pothole_geojson)
 

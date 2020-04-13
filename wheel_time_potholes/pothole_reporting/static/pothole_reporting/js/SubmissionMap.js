@@ -2,12 +2,10 @@ var lat, lon, map, infoWindow, latLng;
 var icon_base = DJANGO_STATIC_URL + '/img/map-markers/';
 var activeFeature = null;
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 41.258431, lng: -96.010453 },
-    zoom: 16,
+function reloadGeoJson() {
+  map.data.forEach(function(feature) {
+    map.data.remove(feature);
   });
-
   map.data.loadGeoJson("/pothole-geojson/?active=false");
   map.data.setStyle(function(feature) {
     let active = feature.getProperty("active");
@@ -23,7 +21,15 @@ function initMap() {
 
     return {icon: icon};
   });
+}
 
+function initMap(latlng={ lat: 41.258431, lng: -96.010453 }) {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: latlng,
+    zoom: 16,
+  });
+
+  reloadGeoJson();
   infoWindow = new google.maps.InfoWindow();
 
   // Configure the click listener.
@@ -111,18 +117,10 @@ function initMap() {
   });
 }
 
-function placeMarker(location) {
-  var marker = new google.maps.Marker({
-    position: location,
-    map: map,
-    icon: icon_base + "map-marker-unconfirmed.png",
-  });
-}
-
 function onConfirm(event) {
   let content =
       '<div class="submission-window">' +
-      "<h4>Submit a new Pothole</h4>" +
+      "<h4>Confirm this Pothole</h4>" +
       '<div id="severity">' +
       '<label class="select-label">Severity:</label>' +
       '<select id="state-select" name="state" size="5">' +
@@ -134,7 +132,7 @@ function onConfirm(event) {
       "</select>" +
       "</div>" +
       "<br/>" +
-      '<input onclick="return onUpdate(this);" class="alignright" id="submit-button" type="submit" value="Submit pothole"/>' +
+      '<input onclick="return onUpdate(this);" class="alignright" id="submit-button" type="submit" value="Confirm pothole"/>' +
       "</div>";
   $(event).parent().parent().html(content)
 }
@@ -180,8 +178,8 @@ function onUpdate(event, fixed=false) {
       xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
     },
     success: function (data) {
+      reloadGeoJson();
       alert("Success");
-      placeMarker(latLng);
       infoWindow.close();
     },
     error: function (data) {
@@ -230,8 +228,8 @@ function onSubmit(event) {
         xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
       },
       success: function (data) {
+        reloadGeoJson();
         alert("Success");
-        placeMarker(latLng);
         infoWindow.close();
       },
       error: function (data) {
