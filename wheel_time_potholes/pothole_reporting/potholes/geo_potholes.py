@@ -2,6 +2,7 @@ from geojson import Feature, Point, FeatureCollection, dumps
 from datetime import datetime
 
 from pothole_reporting.models import VwPothole
+from .pothole_queries import vw_pothole_by_date
 
 
 def convert_timestamp(ts):
@@ -12,13 +13,16 @@ def convert_timestamp(ts):
     return datetime.strptime(ts, format)
 
 
-def get_geojson_potholes(active=True):
+def get_geojson_potholes(active=True, date=None):
     """
     If active is true, only return active potholes.
     If active is false, return all potholes.
+    If date is set, then return potholes with ledger information
+    up to the specified date
+    date should be a string of the form: 'YYYY-MM-DD'
     """
-
-    potholes = VwPothole.objects.all()
+    potholes = VwPothole.objects.all() if date is None \
+        else VwPothole.objects.raw(vw_pothole_by_date, {'datetime': '{} 23:59:59'.format(date)})
 
     pothole_features = [Feature(
         geometry=Point((float(pothole.lon), float(pothole.lat)), precision=8),
