@@ -43,22 +43,6 @@ select {
   top: 8px;
 }
 
-.image-nav {
-  margin-right: 10px;
-  background-color: #00c4ff;
-  overflow: hidden;
-  float: left;
-  display: block;
-  text-align: center;
-  padding: 15px;
-  text-decoration: none;
-  color: white;
-}
-
-.image-nav:hover {
-  background-color: #54d7ff;
-}
-
 #picture-submit {
   flex-grow: 0;
 }

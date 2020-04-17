@@ -1,8 +1,22 @@
+var map;
+
+function reloadGeoJson(event) {
+  date = $("#historic-date").val();
+  if (date) {
+    map.data.forEach(function (feature) {
+      map.data.remove(feature);
+    });
+    map.data.loadGeoJson("/pothole-geojson/?active=true&date=" + date);
+  } else {
+    alert("Please specify a date");
+  }
+}
+
 function initMap() {
   const infoWindow = new google.maps.InfoWindow();
   // centered on UNO
   // TODO: center according to where the user is actually located
-  const map = new google.maps.Map(document.getElementById("map"), {
+  map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 41.258431, lng: -96.010453 },
     zoom: 16,
   });
@@ -33,3 +47,16 @@ function initMap() {
     infoWindow.open(map);
   });
 }
+
+$("#change-to-historic").bind("click", function () {
+  $("#change-to-historic").replaceWith(
+    `<a href="#" onclick="return reloadGeoJson(this)" id="load-historic" class="subheading-button">Load Historic View</a>`
+  );
+  $("#historic-label").replaceWith(`<p id="historic-label" class="alignleft">
+                                    Select a date to view the past pothole status</p>`);
+  // min should be set to the first date the application records pothole data for
+  $("#historic-label").after(`<div class="historic-date-container">
+                                <input type="date" id="historic-date" name="historic-date"
+                                min="2020-04-01">
+                              </div>`);
+});
