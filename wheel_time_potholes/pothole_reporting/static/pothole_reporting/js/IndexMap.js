@@ -1,4 +1,5 @@
 var map;
+var icon_base = DJANGO_STATIC_URL + '/img/map-markers/';
 
 function reloadGeoJson(event) {
   date = $("#historic-date").val();
@@ -21,8 +22,21 @@ function initMap() {
     zoom: 16,
   });
 
-  map.data.setStyle({
-    icon: DJANGO_STATIC_URL + "/img/map-markers/map-marker-confirmed.png",
+  map.data.setStyle(function(feature) {
+    let severity = feature.getProperty("severity");
+    console.log(severity);
+    let icon = icon_base;
+    if (severity <= 2) {
+      icon += 'map-marker-level-1.png';
+    } else if (severity <= 3) {
+      icon += 'map-marker-level-2.png';
+    } else if (severity <= 4) {
+      icon += 'map-marker-level-3.png';
+    } else if (severity <= 5) {
+      icon += 'map-marker-level-4.png';
+    }
+
+    return {icon: icon};
   });
 
   map.data.loadGeoJson("/pothole-geojson/?active=true");
