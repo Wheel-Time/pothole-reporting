@@ -33,6 +33,9 @@ function initMap() {
       '<div class="pothole-info">' +
       "<p>Active since: " +
       feature.getProperty("effective_date") +
+      "</br>" +
+      "Severity: " +
+      feature.getProperty("severity") +
       "</p>" +
       '<p class="alignleft">Confirmations: ' +
       feature.getProperty("pothole_reports") +
