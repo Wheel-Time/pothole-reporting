@@ -1,5 +1,5 @@
 var map;
-var icon_base = DJANGO_STATIC_URL + '/img/map-markers/';
+var icon_base = DJANGO_STATIC_URL + "/img/map-markers/";
 
 function reloadGeoJson(event) {
   date = $("#historic-date").val();
@@ -13,6 +13,36 @@ function reloadGeoJson(event) {
   }
 }
 
+function formatPotholeDate(timestamp) {
+  // All dates are handled in UTC time
+  var dateElements = timestamp.split(/[- :]/);
+  var date = new Date(
+    Date.UTC(
+      dateElements[0],
+      dateElements[1] - 1,
+      dateElements[2],
+      dateElements[3],
+      dateElements[4],
+      dateElements[5]
+    )
+  );
+
+  // compute number of days between submission and current date
+  var today = Date.now();
+  var differenceTime = today - date.getTime();
+  var differenceDays = parseInt(differenceTime / (1000 * 3600 * 24));
+
+  var daysSince;
+  if (differenceDays == 0) {
+    daysSince = "today";
+  } else if (differenceDays == 1) {
+    daysSince = "1 day ago";
+  } else {
+    daysSince = differenceDays + " days ago";
+  }
+  return `${date.getMonth()}/${date.getDate()}/${date.getFullYear()} (${daysSince})`;
+}
+
 function initMap() {
   const infoWindow = new google.maps.InfoWindow();
   // centered on UNO
@@ -22,42 +52,38 @@ function initMap() {
     zoom: 16,
   });
 
-  map.data.setStyle(function(feature) {
+  map.data.setStyle(function (feature) {
     let severity = feature.getProperty("severity");
-    console.log(severity);
     let icon = icon_base;
     if (severity <= 2) {
-      icon += 'map-marker-level-1.png';
+      icon += "map-marker-level-1.png";
     } else if (severity <= 3) {
-      icon += 'map-marker-level-2.png';
+      icon += "map-marker-level-2.png";
     } else if (severity <= 4) {
-      icon += 'map-marker-level-3.png';
+      icon += "map-marker-level-3.png";
     } else if (severity <= 5) {
-      icon += 'map-marker-level-4.png';
+      icon += "map-marker-level-4.png";
     }
 
-    return {icon: icon};
+    return { icon: icon };
   });
 
   map.data.loadGeoJson("/pothole-geojson/?active=true");
 
   map.data.addListener("mouseover", function (event) {
     var feature = event.feature;
-    var content =
-      '<div class="pothole-info">' +
-      "<p>Active since: " +
-      feature.getProperty("effective_date") +
-      "</br>" +
-      "Severity: " +
-      feature.getProperty("severity") +
-      "</p>" +
-      '<p class="alignleft">Confirmations: ' +
-      feature.getProperty("pothole_reports") +
-      "</p>" +
-      '<p class="alignright">Fixed: ' +
-      feature.getProperty("fixed_reports") +
-      "</p>" +
-      "</div>";
+    var content = 
+      `<div class="pothole-info">
+        <p>
+          <span>Active since: ${formatPotholeDate(feature.getProperty("effective_date"))}</span>
+          </br></br>
+          <span>Severity: ${feature.getProperty("severity")}</span>
+        </p>
+        <p class="alignleft">Confirmations: ${feature.getProperty("pothole_reports")} 
+        </p>
+        <p class="alignright">Fixed: ${feature.getProperty("fixed_reports")}
+        </p>
+      </div>`;
     infoWindow.setContent(content);
     infoWindow.setPosition(event.feature.getGeometry().get());
     infoWindow.setOptions({ pixelOffset: new google.maps.Size(0, -30) });
