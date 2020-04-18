@@ -42,6 +42,36 @@ function getCookie(name) {
   return cookieValue;
 }
 
+function formatPotholeDate(timestamp) {
+  // All dates are handled in UTC time
+  var dateElements = timestamp.split(/[- :]/);
+  var date = new Date(
+    Date.UTC(
+      dateElements[0],
+      dateElements[1] - 1,
+      dateElements[2],
+      dateElements[3],
+      dateElements[4],
+      dateElements[5]
+    )
+  );
+
+  // compute number of days between submission and current date
+  var today = Date.now();
+  var differenceTime = today - date.getTime();
+  var differenceDays = parseInt(differenceTime / (1000 * 3600 * 24));
+
+  var daysSince;
+  if (differenceDays == 0) {
+    daysSince = "today";
+  } else if (differenceDays == 1) {
+    daysSince = "1 day ago";
+  } else {
+    daysSince = differenceDays + " days ago";
+  }
+  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} (${daysSince})`;
+}
+
 function initMap(latlng={ lat: 41.258431, lng: -96.010453 }) {
   map = new google.maps.Map(document.getElementById("map"), {
     center: latlng,
@@ -102,26 +132,26 @@ function initMap(latlng={ lat: 41.258431, lng: -96.010453 }) {
     if (feature.getProperty("active")) {
       content +=
       "<p>Active since: " +
-      feature.getProperty("effective_date") +
+      formatPotholeDate(feature.getProperty("effective_date")) +
       "</p>";
     } else if (feature.getProperty("fixed")) {
       content +=
       "<p>Fixed since: " +
-      feature.getProperty("fixed_date") +
+      formatPotholeDate(feature.getProperty("fixed_date")) +
       "</p>";
     } else {
+      // create_date is a mysql datetime, so must remove timezone information
+      var dateNoTZ = feature.getProperty("create_date").split(/[+]/)[0]
       content +=
       "<p>Submitted: " +
-      feature.getProperty("create_date") +
+      formatPotholeDate(dateNoTZ) +
       "</p>";
     }
     content +=
-      '<p class="alignleft">Confirmations: ' +
-      feature.getProperty("pothole_reports") +
-      "</p>" +
-      '<p class="alignright">Fixed: ' +
-      feature.getProperty("fixed_reports") +
-      `</p>
+      `<p class="alignleft">Confirmations: ${feature.getProperty("pothole_reports")}
+      </p>
+      <p class="alignright">Fixed: ${feature.getProperty("fixed_reports")}
+      </p>
       </div>
       <div class='row'>
         <input onclick="return onConfirm(this);" class="alignleft" id="confirm-button" type="submit" value="Confirm"/>
