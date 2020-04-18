@@ -36,7 +36,7 @@ def get_geojson_potholes(active=True, date=None):
                                 and convert_timestamp(pothole.fixed_date) > datetime.utcnow(),
                     "fixed_date": str(pothole.fixed_date),
                     "fixed": pothole.fixed_date and convert_timestamp(pothole.fixed_date) < datetime.utcnow(),
-                    "severity": str(pothole.avg_severity),
+                    "severity": str(('%f' % round(pothole.avg_severity, 2)).rstrip('.0')),
                     "utcnow": str(datetime.utcnow())
                     })
         for pothole in potholes
