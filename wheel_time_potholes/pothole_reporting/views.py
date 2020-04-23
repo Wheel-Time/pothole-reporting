@@ -3,14 +3,14 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.db import transaction, DatabaseError, IntegrityError
+from django.utils import timezone
 from PIL import UnidentifiedImageError
 
 from pothole_reporting.potholes.geotag_image import create_pothole_by_image
 from pothole_reporting.potholes.geo_potholes import get_geojson_potholes
-from .forms import (
-    PotholeImageForm,
-    login_form,
-    signup_form)
+from .forms import PotholeImageForm, login_form, signup_form
+from .models import Pothole, PotholeLedger
 from .exceptions import NoExifDataError
 from .models import Pothole, PotholeLedger, SiteUser
 
@@ -59,13 +59,59 @@ def signup_view(request):
     return render(request,"pothole_reporting/signup.html", {'form':form})
 
 
+def submit_pothole(request):
+    if request.method == 'GET':
+        return render(request,
+                      'pothole_reporting/submission.html',
+                      {"api_key": settings.MAP_API_KEY})
+    elif request.method == 'POST':
+        req = request.POST
+        current_datetime = timezone.now()
+
+        pothole = Pothole(lat=req['lat'], lon=req['lon'], create_date=current_datetime)
+        # TODO: Replace fk_user_id with SiteUser object that is attached to request
+        p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=1, state=req['state'], submit_date=current_datetime)
+
+        try:
+            with transaction.atomic():
+                pothole.save()
+                p_ledger.save()
+        except (DatabaseError, IntegrityError):
+            print("Transaction failed")
+
+        return HttpResponse("SUCCESS")
+
+
+def update_pothole(request):
+    if request.method == 'GET':
+        return render(request,
+                      'pothole_reporting/submission.html',
+                      {"api_key": settings.MAP_API_KEY})
+    elif request.method == 'POST':
+        req = request.POST
+        current_datetime = timezone.now()
+
+        pothole = Pothole.objects.get(id=request.POST['pothole_id'])
+        # TODO: Replace fk_user_id with SiteUser object that is attached to request
+        p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=1, state=req['state'], submit_date=current_datetime)
+
+        try:
+            with transaction.atomic():
+                pothole.save()
+                p_ledger.save()
+        except (DatabaseError, IntegrityError):
+            print("Transaction failed")
+
+        return HttpResponse("SUCCESS")
+
+
 def pothole_picture(request):
     text = ""
 
     if request.method == 'POST':
         form = PotholeImageForm(request.POST, request.FILES)
-        if form.is_valid():
 
+        if form.is_valid():
             image = request.FILES['file']
             try:
                 create_pothole_by_image(image)
@@ -91,5 +137,10 @@ def pothole_picture(request):
 
 
 def pothole_geojson(request):
-    pothole_geojson = get_geojson_potholes(active=True)
+    if request.method == 'GET':
+        active = request.GET.get('active')
+        active = (active is not None and active.lower() != "false")
+        date = request.GET.get('date')
+        pothole_geojson = get_geojson_potholes(active=active, date=date)
     return HttpResponse(pothole_geojson)
+

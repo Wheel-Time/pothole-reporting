@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}Test{% endblock title %} | Pothole Reporting</title>
+
+    {% block head_meta %}
+      {% block head_meta_charset %}
+        <meta http-equiv="Content-Type"
+              content="charset=utf-8" />
+      {% endblock head_meta_charset %}
+      {% block head_meta_contentlanguage %}
+        <meta http-equiv="Content-Language" value="en-US" />
+      {% endblock head_meta_contentlanguage %}
+      {% block head_meta_viewport %}
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0">
+      {% endblock head_meta_viewport %}
+    {% endblock head_meta %}
+    {% block head_static %}
+
+    {% endblock head_static %}
+    {% block head_css %}
+      {% block head_css_site %}
+        {% load static %}
+        <link href="{% static 'pothole_reporting/css/nav.css' %}"
+              rel="stylesheet">
+      {% endblock head_css_site %}
+      {% block head_css_page %}
+
+      {% endblock head_css_page %}
+    {% endblock head_css %}
+  </head>
+  <body>
+      <div class="header">
+        {% block header_content %}
+          <div class="navbar">
+            <div class="nav-header">
+              <a href="{% url 'index' %}">Wheel Time Pothole Reporting</a>
+            </div>
+            <div class="nav-body">
+              <ul class="nav-list">
+                <li><a  href="{% url 'signup' %}">Sign up</a></li>
+                <li><a  href="{% url 'submit' %}">Submit</a></li>
+                <li><a  href="{% url 'index' %}">Home</a></li>
+              </ul>
+            </div>
+          </div>
+        {% endblock header_content %}
+      </div class="header">
+        {% block subheader_content %}
+        {% endblock subheader_content %}
+      <div id="site-wrapper">
+        {% block content %}
+          This should not be visible
+        {% endblock content %}
+      </div>
+      <div class="footer">
+        {% block footer_content %}
+          Copyright Wheel Time Systems
+        {% endblock footer_content %}
+      </div>
+  </body>
+  {% block footer_javascript %}
+    <script type="text/javascript">
+      DJANGO_STATIC_URL = "{% static 'pothole_reporting' %}";
+    </script>
+    {% block footer_javascript_site %}
+
+    {% endblock footer_javascript_site %}
+    {% block footer_javascript_page %}
+
+    {% endblock footer_javascript_page %}
+  {% endblock footer_javascript %}
+</html>

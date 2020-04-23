@@ -19,17 +19,6 @@ class Pothole(models.Model):
         db_table = 'pothole'
 
 
-class PotholeLedger(models.Model):
-    fk_pothole = models.ForeignKey(Pothole, models.DO_NOTHING)
-    fk_user = models.ForeignKey('SiteUser', models.DO_NOTHING)
-    state = models.IntegerField()
-    submit_date = models.DateTimeField()
-
-    class Meta:
-        managed = False     # All pre-existing tables, so false should be kept UNLESS we want to generate from django
-        db_table = 'pothole_ledger'
-
-
 class SiteUser(models.Model):
     username = models.CharField(unique=True, max_length=32)
     first_name = models.CharField(max_length=32)
@@ -43,6 +32,17 @@ class SiteUser(models.Model):
         db_table = 'site_user'
 
 
+class PotholeLedger(models.Model):
+    fk_pothole = models.ForeignKey(Pothole, models.DO_NOTHING)
+    fk_user = models.ForeignKey(SiteUser, models.DO_NOTHING)
+    state = models.IntegerField()
+    submit_date = models.DateTimeField()
+
+    class Meta:
+        managed = False     # All pre-existing tables, so false should be kept UNLESS we want to generate from django
+        db_table = 'pothole_ledger'
+
+
 class VwPothole(models.Model):
     id = models.IntegerField(primary_key=True)
     lat = models.DecimalField(max_digits=11, decimal_places=8)
@@ -52,6 +52,7 @@ class VwPothole(models.Model):
     fixed_date = models.CharField(max_length=76, blank=True, null=True)
     pothole_reports = models.DecimalField(max_digits=23, decimal_places=0, blank=True, null=True)
     fixed_reports = models.DecimalField(max_digits=23, decimal_places=0, blank=True, null=True)
+    avg_severity = models.DecimalField(max_digits=7, decimal_places=4, blank=True, null=True)
 
     def save(self):
         return  # disallow saving to view

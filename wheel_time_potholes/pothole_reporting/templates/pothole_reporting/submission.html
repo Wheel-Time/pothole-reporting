@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock title %}
+{% block title %}Submission{% endblock title %}
 
 {% block head_static %}
   {% load static %}
@@ -7,19 +7,19 @@
 
 {% block head_css_page %}
   <link rel="stylesheet" href="{% static 'pothole_reporting/css/main.css' %}"/>
-  <link rel="stylesheet" href="{% static 'pothole_reporting/css/index.css' %}"/>
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/submission.css' %}"/>
   <link rel="stylesheet" href="{% static 'pothole_reporting/css/map.css' %}"/>
 {% endblock head_css_page %}
 
 {% block subheader_content %}
-  <div id="historic-view">
-    <a href="#" type="button" class="subheading-button" id="change-to-historic">Historic View</a>
-    <p class="alignleft" id="historic-label">Click here to view the active potholes on a past date</p>
+  <div id="picture-submit">
+    <a class="subheading-button" href="{% url 'pothole-picture' %}">Image Submission</a>
+    <p class="alignleft">Click here to submit a geotagged image of a pothole</p>
   </div>
 {% endblock subheader_content %}
 
 {% block content %}
-  <div id="map"></div>
+    <div id="map"></div>
 {% endblock content %}
 
 {% block footer_content %}
@@ -27,7 +27,8 @@
 
 {% block footer_javascript_page %}
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-  <script src="{% static 'pothole_reporting/js/IndexMap.js' %}"></script>
+  <script src="{% static 'pothole_reporting/js/SubmissionMap.js' %}">
+  </script>
   <script
     src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&callback=initMap"
     async
