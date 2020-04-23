@@ -12,6 +12,7 @@ from .forms import (
     login_form,
     signup_form)
 from .exceptions import NoExifDataError
+from .models import Pothole, PotholeLedger, SiteUser
 
 
 def index(request):
@@ -22,17 +23,19 @@ def index(request):
 
 def login_view(request):
     form = login_form(request.POST)
+
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request,username=username,password=password)
-        if user is not None:
-            login(request,user)
-            return redirect('index') #redirect to the homepage for now
+        user = SiteUser.objects.filter(username=username, pword=password)
+        if user.exists():
+            print('yay')
+        #     login(request,user)
+            return redirect('index')
         else:
             messages.info(request,'username or password incorrect!')
-    
-    return render(request,"pothole_reporting/login.html")
+
+    return render(request,"pothole_reporting/login.html", {'form':form})
 
 
 def signup_view(request):
@@ -40,12 +43,21 @@ def signup_view(request):
     if request.method == "POST":
         form = signup_form(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request,f'Account was created sucessfully for {username}!')
-            return redirect('login')
-        else:
-            form = signup_form()
+            username = request.POST.get('username')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            email = request.POST.get('email')
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+            print(password1)
+            print(password2)
+            if password1 == password2:
+                user = SiteUser(username=username, first_name=first_name, last_name=last_name, email=email, pword=password1, is_admin=0)
+                user.save()
+                messages.success(request,f'Account was created sucessfully for {username}!')
+                return redirect('login')
+            else:
+                messages.info(request, 'passwords do not match')
     return render(request,"pothole_reporting/signup.html", {'form':form})
 
 

@@ -11,26 +11,15 @@ class PotholeImageForm(forms.Form):
                            label="Select Pothole image")
 
 
-class login_form(AuthenticationForm):
+class login_form(forms.Form):
     username = forms.CharField(widget=TextInput(attrs={'class':'validate','placeholder': 'Username'}))
     password = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Password'}))
 
 
-class signup_form(UserCreationForm):
+class signup_form(forms.Form):
     username = forms.CharField(label='',widget=forms.TextInput(attrs={"placeholder" : "Username"}))
     first_name = forms.CharField(label='',widget=forms.TextInput(attrs={"placeholder" : "Firstname"}))
     last_name = forms.CharField(label='',widget=forms.TextInput(attrs={"placeholder" : "Lastname"}))
     email = forms.EmailField(label='',widget=forms.TextInput(attrs={"placeholder" : "Email"}))
     password1 = forms.CharField(label='',widget=forms.PasswordInput(attrs={"placeholder" : "Enter password"}))
     password2 = forms.CharField(label='',widget=forms.PasswordInput(attrs={"placeholder" : "Re-enter password"}))
-
-    class Meta:
-        model = User
-        fields = [
-            'username',
-            'first_name',
-            'last_name',
-            'email',
-            'password1',
-            'password2',
-        ]
