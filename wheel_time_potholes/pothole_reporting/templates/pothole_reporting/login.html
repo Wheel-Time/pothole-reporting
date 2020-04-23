@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title %}
+
+{% block head_static %}
+  {% load static %}
+{% endblock head_static %}
+
+{% block head_css_page %}
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/main.css' %}"/>
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/signup.css' %}"/>
+{% endblock head_css_page %}
+
+{% block content %}
+  <div class="login-page" style="margin-bottom: 20;">
+    <div class="form">
+      <!-- <form action="{% url 'index' %}" method="POST" class="login-form" > -->
+      <form method="POST" class="login-form" >
+          <p style="color: aliceblue;font-size: 20px;padding-top: 20px;">Login</p>
+          {% csrf_token %}
+          {{ form.username }}
+          {{ form.password }}
+          <button>login</button>
+          <!-- <input type='submit' value='login'></input>> -->
+          {% for message in messages %}
+          <p class="message">{{message}}</p>
+          {% endfor %}
+          <p class="message" style="padding-bottom: 20px;">Not Registered? <a href="/signup/"><u>Register</u></a></p>
+      </form>
+  </div>
+  </div>
+{% endblock content %}
+
+{% block footer_content %}
+{% endblock footer_content %}
+
+{% block footer_javascript_page %}
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+{% endblock footer_javascript_page %}
