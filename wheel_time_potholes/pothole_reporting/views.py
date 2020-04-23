@@ -9,7 +9,7 @@ from PIL import UnidentifiedImageError
 
 from pothole_reporting.potholes.geotag_image import create_pothole_by_image
 from pothole_reporting.potholes.geo_potholes import get_geojson_potholes
-from .forms import PotholeImageForm, login_form, signup_form
+from .forms import PotholeImageForm, LoginForm, SignupForm
 from .models import Pothole, PotholeLedger
 from .exceptions import NoExifDataError
 from .models import Pothole, PotholeLedger, SiteUser
@@ -21,8 +21,8 @@ def index(request):
                   {"api_key": settings.MAP_API_KEY})
 
 
-def login_view(request):
-    form = login_form(request.POST)
+def login_user(request):
+    form = LoginForm(request.POST)
 
     if request.method == "POST":
         username = request.POST.get('username')
@@ -36,10 +36,10 @@ def login_view(request):
     return render(request,"pothole_reporting/login.html", {'form':form})
 
 
-def signup_view(request):
-    form = signup_form(request.POST or None)
+def create_user(request):
+    form = SignupForm(request.POST or None)
     if request.method == "POST":
-        form = signup_form(request.POST)
+        form = SignupForm(request.POST)
         if form.is_valid():
             username = request.POST.get('username')
             first_name = request.POST.get('first_name')

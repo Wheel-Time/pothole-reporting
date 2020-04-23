@@ -11,12 +11,12 @@ class PotholeImageForm(forms.Form):
                            label="Select Pothole image")
 
 
-class login_form(forms.Form):
+class LoginForm(forms.Form):
     username = forms.CharField(widget=TextInput(attrs={'class':'validate','placeholder': 'Username'}))
     password = forms.CharField(widget=PasswordInput(attrs={'placeholder':'Password'}))
 
 
-class signup_form(forms.Form):
+class SignupForm(forms.Form):
     username = forms.CharField(label='',widget=forms.TextInput(attrs={"placeholder" : "Username"}))
     first_name = forms.CharField(label='',widget=forms.TextInput(attrs={"placeholder" : "Firstname"}))
     last_name = forms.CharField(label='',widget=forms.TextInput(attrs={"placeholder" : "Lastname"}))
