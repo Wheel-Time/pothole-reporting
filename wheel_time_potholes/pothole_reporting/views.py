@@ -29,8 +29,6 @@ def login_view(request):
         password = request.POST.get('password')
         user = SiteUser.objects.filter(username=username, pword=password)
         if user.exists():
-            print('yay')
-        #     login(request,user)
             return redirect('index')
         else:
             messages.info(request,'username or password incorrect!')
