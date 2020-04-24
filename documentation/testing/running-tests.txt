@@ -1,0 +1,3 @@
+When running tests, you must run the following command in the wheel_time_pothole directory:
+    python manage.py test --keepdb
+the --keepdb flag allows us to use custom tables for testing instead of the tables managed by django

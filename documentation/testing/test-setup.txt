@@ -1,0 +1,6 @@
+In order for selenium tests to run you must
+    - Have firefox installed on your machine
+    - Have geckodriver installed
+
+To install geckodriver, visit https://github.com/mozilla/geckodriver/releases and download the latest release.
+Extract the exe from the zip file, and move it to your base python install directory, for example C:\Python37\
