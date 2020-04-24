@@ -1,0 +1,13 @@
+This project doesn't use a majority of django's default tables, instead opting to use
+unmanaged models that are created through sql files.
+
+We do make use of the table django_session, which requires a migration.
+In order to do this:
+
+    SKIP the step 'python manage.py makemigrations'
+        The default tables to migrate should already be present, and running makemigrations
+        will raise the issue of dealing with other model migrations
+
+    RUN 'python manage.py migrate'
+
+    And then run the file 'sql/delete-unused-tables.sql' to remove all new tables except django_sessions
