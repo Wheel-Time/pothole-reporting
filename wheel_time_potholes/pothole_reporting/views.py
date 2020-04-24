@@ -1,21 +1,62 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.db import transaction, DatabaseError, IntegrityError
 from django.utils import timezone
 from PIL import UnidentifiedImageError
 
 from pothole_reporting.potholes.geotag_image import create_pothole_by_image
 from pothole_reporting.potholes.geo_potholes import get_geojson_potholes
-from .forms import PotholeImageForm
+from .forms import PotholeImageForm, LoginForm, SignupForm
 from .models import Pothole, PotholeLedger
 from .exceptions import NoExifDataError
+from .models import Pothole, PotholeLedger, SiteUser
 
 
 def index(request):
     return render(request,
                   'pothole_reporting/index.html',
                   {"api_key": settings.MAP_API_KEY})
+
+
+def login_user(request):
+    form = LoginForm(request.POST)
+
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = SiteUser.objects.filter(username=username, pword=password)
+        if user.exists():
+            return redirect('index')
+        else:
+            messages.info(request,'username or password incorrect!')
+
+    return render(request,"pothole_reporting/login.html", {'form':form})
+
+
+def create_user(request):
+    form = SignupForm(request.POST or None)
+    if request.method == "POST":
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            username = request.POST.get('username')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            email = request.POST.get('email')
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+            print(password1)
+            print(password2)
+            if password1 == password2:
+                user = SiteUser(username=username, first_name=first_name, last_name=last_name, email=email, pword=password1, is_admin=0)
+                user.save()
+                messages.success(request,f'Account was created sucessfully for {username}!')
+                return redirect('login')
+            else:
+                messages.info(request, 'passwords do not match')
+    return render(request,"pothole_reporting/signup.html", {'form':form})
 
 
 def submit_pothole(request):

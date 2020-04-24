@@ -1,0 +1,88 @@
+body{
+    background-image: linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url("../img/background_img.png");
+    background-repeat: no-repeat;
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+.login-page{
+    /* width: 360px;
+    padding: 8% 0 0;
+    margin: auto; */
+    position: absolute;
+    width: 300px;
+    height: 50px;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    margin: -200px 0 0 -150px;
+}
+
+.signup-page{
+    position: absolute;
+    width: 300px;
+    height: 50px;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    margin: -320px 0 0 -150px;
+}
+
+.form{
+    position: relative;
+    z-index: 1;
+    background: rgba(7,40,195,0.4);
+    max-width: 360px;
+    margin: 0 auto 100px;
+    text-align: center;
+}
+
+.form input{
+    font-family: Arial, Helvetica, sans-serif;
+    outline: 1;
+    background: azure;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 8px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.form button{
+    font-family: Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    outline: 0;
+    background: green;
+    width: 70%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 8px;
+    color: azure;
+    font-size: 14px;
+    cursor: pointer;
+}
+.form button:hover,.form button:active{
+    background: blueviolet;
+}
+
+.form .message{
+    margin: 15px 0 0;
+    color: aliceblue;
+    font-size: 14px;
+}
+
+.signUp{
+    margin: 15px 0 0;
+    color: aliceblue;
+    font-size: 14px;
+}
+
+.form .message a{
+    color: azure;
+    text-decoration: none;
+}
+
+.form .register-form{
+    display: none;
+}
