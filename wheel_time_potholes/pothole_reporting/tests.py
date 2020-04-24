@@ -19,14 +19,12 @@ def setUpDB():
         email='WheelTimePotholes@gmail.com',
         pword='1234',
         is_admin=1)
-    # print('setup')
 
 def tearDownDB():
     connection.cursor().execute("DROP TABLE pothole_ledger")
     connection.cursor().execute("DROP TABLE site_user")
     connection.cursor().execute("DROP TABLE pothole")
     connection.cursor().execute("DROP view vw_pothole")
-    # print('teardown')
 
 class SubmitTest(TestCase):
     def setUp(self):
