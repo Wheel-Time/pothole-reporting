@@ -17,7 +17,7 @@
         <p style="color: aliceblue;font-size: 20px;padding-top: 20px;">Sign Up</p>
         {% csrf_token %}
         {{ form.as_p }}
-        <button>Create</button>
+        <button name="create">Create</button>
         <p class="message"><span><input type="checkbox"></span> I agree to the terms of services</p>
         {% for message in messages %}
         <p class="message">{{message}}</p>
