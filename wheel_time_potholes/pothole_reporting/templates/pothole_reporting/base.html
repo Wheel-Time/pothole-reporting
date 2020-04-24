@@ -39,7 +39,11 @@
             </div>
             <div class="nav-body">
               <ul class="nav-list">
-                <li><a  href="{% url 'signup' %}">Sign up</a></li>
+                {% if logged_in %}
+                <li><a id="logout-button" href="#">Log out</a></li>
+                {% else %}
+                <li><a href="{% url 'signup' %}">Sign up</a></li>
+                {% endif %}
                 <li><a  href="{% url 'submit' %}">Submit</a></li>
                 <li><a  href="{% url 'index' %}">Home</a></li>
               </ul>
@@ -61,9 +65,11 @@
       </div>
   </body>
   {% block footer_javascript %}
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript">
       DJANGO_STATIC_URL = "{% static 'pothole_reporting' %}";
     </script>
+    <script src="{% static 'pothole_reporting/js/Session.js' %}"></script>
     {% block footer_javascript_site %}
 
     {% endblock footer_javascript_site %}

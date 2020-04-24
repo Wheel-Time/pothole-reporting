@@ -214,7 +214,7 @@ function onUpdate(event, fixed=false) {
     },
     error: function (data) {
       alert(
-        "Failure, please make sure you have selected a severity level for this pothole"
+        "Failure, please make sure you are logged in and have selected a severity level for this pothole"
       );
     },
   });
@@ -246,7 +246,7 @@ function onSubmit(event) {
       },
       error: function (data) {
         alert(
-          "Failure, please make sure you have selected a severity level for this pothole"
+          "Failure, please make sure you are logged in and have selected a severity level for this pothole"
         );
       },
     });
