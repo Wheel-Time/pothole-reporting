@@ -47,8 +47,6 @@ def create_user(request):
             email = request.POST.get('email')
             password1 = request.POST.get('password1')
             password2 = request.POST.get('password2')
-            print(password1)
-            print(password2)
             if password1 == password2:
                 user = SiteUser(username=username, first_name=first_name, last_name=last_name, email=email, pword=password1, is_admin=0)
                 user.save()

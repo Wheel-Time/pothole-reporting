@@ -152,13 +152,26 @@ class MarkFixedTest(TestCase):
         self.assertIsNotNone(pothole.effective_date)
         self.assertNotEqual('9999-12-31 23:59:59', pothole.fixed_date)
 
-# class PotholeTests(TestCase):
-#     def setUp(self):
-#         setUpDB()
+class SignupTest(TestCase):
+    def setUp(self):
+        setUpDB()
 
-#     def test_create_pothole(self):
-#         self.assertEqual(0, Pothole.objects.all().count())
-#         self.assertEqual(0, VwPothole.objects.all().count())
-#         Pothole.objects.create(lat=0, lon=0, create_date=timezone.now())
-#         self.assertEqual(1, VwPothole.objects.all().count())
-#         self.assertEqual(1, Pothole.objects.all().count())
+    def tearDown(self):
+        tearDownDB()
+
+    def test_submit_pothole(self):
+        c = Client()
+
+        self.assertEqual(1, SiteUser.objects.all().count())
+
+        respose = c.post('/signup/', {
+            'username': 'test',
+            'first_name': 'test',
+            'last_name': 'user',
+            'email': 'test_user@test.email',
+            'password1': 'test_pass',
+            'password2': 'test_pass'
+        })
+
+        self.assertEqual(2, SiteUser.objects.all().count())
+
