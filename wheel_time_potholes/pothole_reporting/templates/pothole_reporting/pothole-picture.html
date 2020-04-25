@@ -7,27 +7,51 @@
 
 {% block head_css_page %}
   <link rel="stylesheet" href="{% static 'pothole_reporting/css/main.css' %}"/>
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/submission.css' %}"/>
+  <link rel="stylesheet" href="{% static 'pothole_reporting/css/pothole-picture.css' %}"/>
 {% endblock head_css_page %}
 
+{% block subheader_content %}
+  <div id="picture-submit">
+    <a class="subheading-button" href="{% url 'submit' %}">Map Submission</a>
+    <p class="alignleft">Click here to submit a pothole on the map</p>
+  </div>
+{% endblock subheader_content %}
+
 {% block content %}
-  <form
-  action="{% url 'pothole-picture' %}"
-  method="post"
-  enctype="multipart/form-data"
-  >
-  {% csrf_token %}
-  <table>
-    {{ form }}
-  </table>
-  <input type="submit" value="Submit picture" />
-  <br />
-    {{ text }}
-  </form>
+  <div class="image-form-container">
+    
+    <form
+    id="submit-image-form" 
+    action="{% url 'pothole-picture' %}"
+    method="post"
+    enctype="multipart/form-data"
+    >
+      <h3>Submit a geotagged image of a pothole</h3>
+      <label for="id_file">Select Pothole image:</label>
+      <input type="file" name="file" accept="image/jpeg" required id="id_file">
+      <br />
+      <div id="severity" style="margin: 15px 0px 5px 0px">
+        <label class="select-label">Severity:</label>
+        <select id="state-select" name="state" size="5">
+          <option class="severity-select" id="select-1" value=1>1</option>
+          <option class="severity-select" id="select-2" value=2>2</option>
+          <option class="severity-select" id="select-3" value=3>3</option>
+          <option class="severity-select" id="select-4" value=4>4</option>
+          <option class="severity-select" id="select-5" value=5>5</option>
+        </select>
+      </div>
+      <br />
+      <input type="submit" value="Submit picture" />
+    </form>
+  </div>
 {% endblock content %}
 
 {% block footer_content %}
 {% endblock footer_content %}
 
 {% block footer_javascript_page %}
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="{% static 'pothole_reporting/js/ImageSubmission.js' %}"></script>
 {% endblock footer_javascript_page %}
 

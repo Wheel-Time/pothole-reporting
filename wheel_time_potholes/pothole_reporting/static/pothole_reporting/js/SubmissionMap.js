@@ -213,7 +213,7 @@ function onUpdate(event, fixed=false) {
       },
       success: function (data) {
         reloadGeoJson();
-        alert("Success");
+        alert("Successfuly submitted pothole report");
         infoWindow.close();
       },
       error: function (data) {
@@ -250,7 +250,7 @@ function onSubmit(event) {
         },
         success: function (data) {
           reloadGeoJson();
-          alert("Success");
+          alert("Successfuly created a new pothole");
           infoWindow.close();
         },
         error: function (data) {
