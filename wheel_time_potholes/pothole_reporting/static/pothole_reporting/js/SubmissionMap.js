@@ -187,53 +187,25 @@ function onConfirm(event) {
 
 function onUpdate(event, fixed=false) {
   let potholeData;
+  let stateHasValue = false;
   if (fixed) {
+    stateHasValue = true
     potholeData = {
       pothole_id: activeFeature.getId(),
       state: 0,
     }
   } else {
+    stateHasValue = state = $("#state-select").val()
     potholeData = {
       pothole_id: activeFeature.getId(),
-      state: $("#state-select").val(),
+      state: state,
     }
   }
 
-  $.ajax({
-    type: "POST",
-    url: "/update/",
-    data: potholeData,
-    beforeSend: function (xhr, settings) {
-      // add the csrf token to the submission header
-      xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
-    },
-    success: function (data) {
-      reloadGeoJson();
-      alert("Success");
-      infoWindow.close();
-    },
-    error: function (data) {
-      alert(
-        "Failure, please make sure you have selected a severity level for this pothole"
-      );
-    },
-  });
-}
-
-function onSubmit(event) {
-  //Append lat, long, and csrf token from click to form submission
-  $("#pothole-form").submit(function (event) {
-    event.preventDefault();
-
-    var potholeData = {
-      state: $("#state-select").val(),
-      lat: lat,
-      lon: lon,
-    };
-
+  if (stateHasValue) {
     $.ajax({
       type: "POST",
-      url: "/submit/",
+      url: "/update/",
       data: potholeData,
       beforeSend: function (xhr, settings) {
         // add the csrf token to the submission header
@@ -246,9 +218,51 @@ function onSubmit(event) {
       },
       error: function (data) {
         alert(
-          "Failure, please make sure you have selected a severity level for this pothole"
+          "Failure, please make sure you are logged in in order to submit a pothole report"
         );
       },
     });
+  } else {
+    alert("Failure, please make sure have selected a severity level for this pothole")
+  }
+}
+
+function onSubmit(event) {
+  //Append lat, long, and csrf token from click to form submission
+  $("#pothole-form").submit(function (event) {
+    event.preventDefault();
+
+    state= $("#state-select").val()
+    var potholeData = {
+      state: state,
+      lat: lat,
+      lon: lon,
+    };
+
+    if (state) {
+      $.ajax({
+        type: "POST",
+        url: "/submit/",
+        data: potholeData,
+        beforeSend: function (xhr, settings) {
+          // add the csrf token to the submission header
+          xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+        },
+        success: function (data) {
+          reloadGeoJson();
+          alert("Success");
+          infoWindow.close();
+        },
+        error: function (data) {
+          console.log(data)
+          alert(
+            "Failure, please make sure you are logged in in order to submit a new pothole"
+          );
+        },
+      });
+    } else {
+      alert("Failure, please make sure have selected a severity level for this pothole")
+    }
+    
   });
 }
