@@ -9,6 +9,7 @@ urlpatterns = [
     path('submit/image', views.pothole_picture, name='pothole-picture'),
     path('pothole-geojson/', views.pothole_geojson, name='pothole-geojson'),
     url('login/', views.login_user, name='login'),
+    url('logout/', views.logout_user, name='logout'),
     url('signup/', views.create_user, name='signup'),
     path('submit/', views.submit_pothole, name='submit'),
     path('update/', views.update_pothole, name='update')

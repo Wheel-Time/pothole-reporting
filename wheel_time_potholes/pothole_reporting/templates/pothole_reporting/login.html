@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock title %}
+{% block title %}Login{% endblock title %}
 
 {% block head_static %}
   {% load static %}
@@ -12,6 +12,11 @@
 
 {% block content %}
   <div class="login-page" style="margin-bottom: 20;">
+    {% if logged_in %}
+    <div class="form" style="color:aliceblue; padding:20px">
+      <h3>You are already logged in!</h3>
+    </div>
+    {% else %}
     <div class="form">
       <!-- <form action="{% url 'index' %}" method="POST" class="login-form" > -->
       <form method="POST" class="login-form" >
@@ -19,14 +24,15 @@
           {% csrf_token %}
           {{ form.username }}
           {{ form.password }}
-          <button>login</button>
+          <button name="login">login</button>
           <!-- <input type='submit' value='login'></input>> -->
           {% for message in messages %}
           <p class="message">{{message}}</p>
           {% endfor %}
           <p class="message" style="padding-bottom: 20px;">Not Registered? <a href="/signup/"><u>Register</u></a></p>
       </form>
-  </div>
+    </div>
+    {% endif %}
   </div>
 {% endblock content %}
 

@@ -15,25 +15,42 @@ from .exceptions import NoExifDataError
 from .models import Pothole, PotholeLedger, SiteUser
 
 
+def _is_logged_in(request):
+    return "user" in request.session
+
+
 def index(request):
     return render(request,
                   'pothole_reporting/index.html',
-                  {"api_key": settings.MAP_API_KEY})
+                  {"api_key": settings.MAP_API_KEY,
+                   "logged_in": _is_logged_in(request)})
 
 
 def login_user(request):
     form = LoginForm(request.POST)
-
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = SiteUser.objects.filter(username=username, pword=password)
         if user.exists():
+            user = user[0]
+            request.session['user'] = user.id
+            request.session['logged_in'] = True
             return redirect('index')
         else:
             messages.info(request,'username or password incorrect!')
 
-    return render(request,"pothole_reporting/login.html", {'form':form})
+    return render(request,"pothole_reporting/login.html",
+                  {'form':form,
+                   "logged_in": _is_logged_in(request)})
+
+
+def logout_user(request):
+    if _is_logged_in(request):
+        del request.session["user"]
+        return HttpResponse("SUCCESS")
+    else:
+        return HttpResponse(status=400)
 
 
 def create_user(request):
@@ -47,8 +64,6 @@ def create_user(request):
             email = request.POST.get('email')
             password1 = request.POST.get('password1')
             password2 = request.POST.get('password2')
-            print(password1)
-            print(password2)
             if password1 == password2:
                 user = SiteUser(username=username, first_name=first_name, last_name=last_name, email=email, pword=password1, is_admin=0)
                 user.save()
@@ -63,14 +78,20 @@ def submit_pothole(request):
     if request.method == 'GET':
         return render(request,
                       'pothole_reporting/submission.html',
-                      {"api_key": settings.MAP_API_KEY})
+                      {"api_key": settings.MAP_API_KEY,
+                       "logged_in": _is_logged_in(request)})
     elif request.method == 'POST':
+        if "user" in request.session:
+            user_id = request.session["user"]
+        else:
+            return HttpResponse(status=401)
+
         req = request.POST
         current_datetime = timezone.now()
 
         pothole = Pothole(lat=req['lat'], lon=req['lon'], create_date=current_datetime)
         # TODO: Replace fk_user_id with SiteUser object that is attached to request
-        p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=1, state=req['state'], submit_date=current_datetime)
+        p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=user_id, state=req['state'], submit_date=current_datetime)
 
         try:
             with transaction.atomic():
@@ -88,12 +109,17 @@ def update_pothole(request):
                       'pothole_reporting/submission.html',
                       {"api_key": settings.MAP_API_KEY})
     elif request.method == 'POST':
+        if "user" in request.session:
+            user_id = request.session["user"]
+        else:
+            return HttpResponse(status=401)
+
         req = request.POST
         current_datetime = timezone.now()
 
         pothole = Pothole.objects.get(id=request.POST['pothole_id'])
         # TODO: Replace fk_user_id with SiteUser object that is attached to request
-        p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=1, state=req['state'], submit_date=current_datetime)
+        p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=user_id, state=req['state'], submit_date=current_datetime)
 
         try:
             with transaction.atomic():
