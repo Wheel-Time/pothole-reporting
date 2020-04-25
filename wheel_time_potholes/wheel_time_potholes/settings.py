@@ -75,12 +75,14 @@ WSGI_APPLICATION = 'wheel_time_potholes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+database_pw = os.environ['RDS_PASSWORD'] if 'RDS_PASSWORD' in os.environ else database_settings.password
+
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.mysql',
        'NAME': 'pothole_reporting',
        'USER': 'root',
-       'PASSWORD': database_settings.password,
+       'PASSWORD': database_pw,
        'HOST': '',
        'PORT': '',
     }

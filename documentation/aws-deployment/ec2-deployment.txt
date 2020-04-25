@@ -4,7 +4,7 @@ The file /etc/systemd/system/gunicorn.service should already be set up to match 
 
 The file /etc/nginx/sites-available/static should already be setup to match nginx-setup.txt
 
-1) zip up the entire project except the env virtual environment
+1) zip up the entire project except the env virtual environment and database_settings.py
 
 2) upload to aws ec2 instance using something like FileZilla
 
@@ -30,6 +30,8 @@ The file /etc/nginx/sites-available/static should already be setup to match ngin
     11) change into pothole-reporting/wheel_time_potholes
 
     12) sudo python3 manage.py collectstatic
+
+    13) sudo systemctl daemon-reload
 
     13) sudo systemctl restart gunicorn
 
