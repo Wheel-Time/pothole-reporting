@@ -37,7 +37,7 @@ $("#submit-image-form").submit(function (event) {
       xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
     },
     success: function (data) {
-      alert("Successfuly created a new pothole");
+      alert("Successfully created a new pothole");
       $("#submit-image-form")[0].reset();
     },
     error: function (data) {
