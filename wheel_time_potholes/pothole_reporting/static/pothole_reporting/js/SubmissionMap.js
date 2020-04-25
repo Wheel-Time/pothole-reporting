@@ -90,7 +90,7 @@ function initMap(latlng={ lat: 41.258431, lng: -96.010453 }) {
     var content =
     `<div class="submission-window">
       <h4>Submit a new Pothole</h4>
-      <form 
+      <form
       id="pothole-form"
       action="{% url "submit" %}"
       method="post">

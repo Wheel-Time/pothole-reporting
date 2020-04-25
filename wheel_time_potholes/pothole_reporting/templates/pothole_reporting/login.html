@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock title %}
+{% block title %}Login{% endblock title %}
 
 {% block head_static %}
   {% load static %}
@@ -24,7 +24,7 @@
           {% csrf_token %}
           {{ form.username }}
           {{ form.password }}
-          <button>login</button>
+          <button name="login">login</button>
           <!-- <input type='submit' value='login'></input>> -->
           {% for message in messages %}
           <p class="message">{{message}}</p>
