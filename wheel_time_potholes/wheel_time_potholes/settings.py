@@ -26,7 +26,7 @@ SECRET_KEY = 'o#(uq%+wemh0-rg*yeue$9@ba0d1vt@%r)v^oi#y1=k3aai5fb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ec2-13-58-115-55.us-east-2.compute.amazonaws.com']
 
 
 # Application definition
@@ -75,12 +75,14 @@ WSGI_APPLICATION = 'wheel_time_potholes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+database_pw = os.environ['RDS_PASSWORD'] if 'RDS_PASSWORD' in os.environ else database_settings.password
+
 DATABASES = {
    'default': {
        'ENGINE': 'django.db.backends.mysql',
        'NAME': 'pothole_reporting',
        'USER': 'root',
-       'PASSWORD': database_settings.password,
+       'PASSWORD': database_pw,
        'HOST': '',
        'PORT': '',
     }
@@ -124,6 +126,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 
 # Make api settings visible to apps

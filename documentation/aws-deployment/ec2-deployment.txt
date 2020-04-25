@@ -1,0 +1,40 @@
+Requires: Python3, pip, nginx, MySQL
+
+The file /etc/systemd/system/gunicorn.service should already be set up to match gunicorn-service.txt
+
+The file /etc/nginx/sites-available/static should already be setup to match nginx-setup.txt
+
+1) zip up the entire project except the env virtual environment and database_settings.py
+
+2) upload to aws ec2 instance using something like FileZilla
+
+3) ssh into the instance
+
+4) unzip the project
+
+5) If MySQL database not set up: sudo mysql
+                                 source /home/ubuntu/pothole-reporting/sql/pothole-database.sql
+                                 source /home/ubuntu/pothole-reporting/sql/views.sql
+   Quit MySQL
+
+6) change into pothole-reporting directory
+
+7) Setup virtual environment: python3 -m venv venv
+
+8) Activate virtual environment: source env/bin/activate
+
+9) Install packages: sudo python3 -m pip install -r requirements.txt
+
+10) Now you must serve the static files using nginx:
+
+    11) change into pothole-reporting/wheel_time_potholes
+
+    12) sudo python3 manage.py collectstatic
+
+    13) sudo systemctl daemon-reload
+
+    13) sudo systemctl restart gunicorn
+
+    14) sudo systemctl restart nginx
+
+The app should now be available at http://ec2-13-58-115-55.us-east-2.compute.amazonaws.com:8000/
