@@ -27,6 +27,16 @@ def tearDownDB():
     connection.cursor().execute("DROP TABLE site_user")
     connection.cursor().execute("DROP TABLE pothole")
     connection.cursor().execute("DROP view vw_pothole")
+    connection.cursor().execute("DROP TABLE django_session")
+    connection.cursor().execute("DROP TABLE django_migrations")
+    connection.cursor().execute("DROP TABLE django_admin_log")
+    connection.cursor().execute("DROP TABLE auth_user_user_permissions")
+    connection.cursor().execute("DROP TABLE auth_user_groups")
+    connection.cursor().execute("DROP TABLE auth_user")
+    connection.cursor().execute("DROP TABLE auth_group_permissions")
+    connection.cursor().execute("DROP TABLE auth_permission")
+    connection.cursor().execute("DROP TABLE django_content_type")
+    connection.cursor().execute("DROP TABLE auth_group")
 
 class SubmitTest(TestCase):
     def setUp(self):
@@ -42,6 +52,7 @@ class SubmitTest(TestCase):
         self.assertEqual(0, VwPothole.objects.all().count())
         self.assertEqual(0, PotholeLedger.objects.all().count())
 
+        c.post('/login/', {'username': 'SYSTEM', 'password': '1234'})
         c.post('/submit/', {'lat': 0, 'lon': 0, 'state': 5})
 
         self.assertEqual(1, VwPothole.objects.all().count())
@@ -62,6 +73,7 @@ class UpdateTest(TestCase):
         self.assertEqual(0, VwPothole.objects.all().count())
         self.assertEqual(0, PotholeLedger.objects.all().count())
 
+        c.post('/login/', {'username': 'SYSTEM', 'password': '1234'})
         c.post('/submit/', {'lat': 0, 'lon': 0, 'state': 5})
 
         self.assertEqual(1, VwPothole.objects.all().count())
@@ -88,6 +100,7 @@ class ConfirmTest(TestCase):
         self.assertEqual(0, VwPothole.objects.all().count())
         self.assertEqual(0, PotholeLedger.objects.all().count())
 
+        c.post('/login/', {'username': 'SYSTEM', 'password': '1234'})
         c.post('/submit/', {'lat': 0, 'lon': 0, 'state': 5})
 
         pothole = VwPothole.objects.get(id=1)
@@ -124,6 +137,7 @@ class MarkFixedTest(TestCase):
         self.assertEqual(0, VwPothole.objects.all().count())
         self.assertEqual(0, PotholeLedger.objects.all().count())
 
+        c.post('/login/', {'username': 'SYSTEM', 'password': '1234'})
         c.post('/submit/', {'lat': 0, 'lon': 0, 'state': 5})
 
         pothole = VwPothole.objects.get(id=1)
@@ -164,7 +178,7 @@ class SignupTest(TestCase):
 
         self.assertEqual(1, SiteUser.objects.all().count())
 
-        respose = c.post('/signup/', {
+        c.post('/signup/', {
             'username': 'test',
             'first_name': 'test',
             'last_name': 'user',
@@ -284,7 +298,7 @@ class SeleniumCreateTest(StaticLiveServerTestCase):
         self.selenium.find_element_by_id('select-4').click()
         self.selenium.find_element_by_id('submit-button').click()
         alert = self.selenium.switch_to_alert()
-        self.assertEqual("Success", alert.text)
+        self.assertEqual("Successfully created a new pothole", alert.text)
         alert.accept()
 
 class SeleniumConfirmTest(StaticLiveServerTestCase):
@@ -319,7 +333,7 @@ class SeleniumConfirmTest(StaticLiveServerTestCase):
         self.selenium.find_element_by_id('select-4').click()
         self.selenium.find_element_by_id('submit-button').click()
         alert = self.selenium.switch_to_alert()
-        self.assertEqual("Success", alert.text)
+        self.assertEqual("Successfully created a new pothole", alert.text)
         alert.accept()
         self.selenium.switch_to_default_content()
         action = webdriver.common.action_chains.ActionChains(self.selenium)
@@ -333,7 +347,7 @@ class SeleniumConfirmTest(StaticLiveServerTestCase):
         self.selenium.find_element_by_id('select-4').click()
         self.selenium.find_element_by_id('submit-button').click()
         alert = self.selenium.switch_to_alert()
-        self.assertEqual("Success", alert.text)
+        self.assertEqual("Successfully submitted pothole report", alert.text)
         alert.accept()
 
 class SeleniumFixTest(StaticLiveServerTestCase):
@@ -368,7 +382,7 @@ class SeleniumFixTest(StaticLiveServerTestCase):
         self.selenium.find_element_by_id('select-4').click()
         self.selenium.find_element_by_id('submit-button').click()
         alert = self.selenium.switch_to_alert()
-        self.assertEqual("Success", alert.text)
+        self.assertEqual("Successfully created a new pothole", alert.text)
         alert.accept()
         self.selenium.switch_to_default_content()
         action = webdriver.common.action_chains.ActionChains(self.selenium)
@@ -378,6 +392,6 @@ class SeleniumFixTest(StaticLiveServerTestCase):
         action.perform()
         self.selenium.find_element_by_id('fixed-button').click()
         alert = self.selenium.switch_to_alert()
-        self.assertEqual("Success", alert.text)
+        self.assertEqual("Successfully submitted pothole report", alert.text)
         alert.accept()
 
