@@ -107,7 +107,8 @@ def update_pothole(request):
     if request.method == 'GET':
         return render(request,
                       'pothole_reporting/submission.html',
-                      {"api_key": settings.MAP_API_KEY})
+                      {"api_key": settings.MAP_API_KEY,
+                       "logged_in": _is_logged_in(request)})
     elif request.method == 'POST':
         if "user" in request.session:
             user_id = request.session["user"]
@@ -132,34 +133,36 @@ def update_pothole(request):
 
 
 def pothole_picture(request):
-    text = ""
+    if request.method == 'GET':
+        return render(request,
+                      'pothole_reporting/pothole-picture.html',
+                      {"logged_in": _is_logged_in(request)})
 
-    if request.method == 'POST':
-        form = PotholeImageForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            image = request.FILES['file']
-            try:
-                create_pothole_by_image(image)
-                # for now just redirect to same page - in future can send to confirmation page
-                return HttpResponseRedirect(request.path_info)
-            except UnidentifiedImageError:
-                print("Unable to open image")
-                text = "Unable to open the image"
-            except (KeyError, NoExifDataError):
-                print("Image had no geotag data")
-                text = "Unable to get geo tag information from image. Make sure " \
-                       "the image is a valid jpeg file with geo tag data."
+    elif request.method == 'POST':
+        if "user" in request.session:
+            user_id = request.session["user"]
         else:
-            form = PotholeImageForm()
+            return HttpResponse("Failure, please make sure you are logged in in order to submit a new pothole",
+                                status=401)
 
-    else:  # GET request
-        form = PotholeImageForm()
+        image = request.FILES['file']
+        if 'state' not in request.POST:
+            return HttpResponse("Failure, please make sure you have selected a severity level",
+                                status=400)
 
-    return render(request,
-                  'pothole_reporting/pothole-picture.html',
-                  {'form': form,
-                   'text': text})
+        try:
+            create_pothole_by_image(image, user_id=user_id, state=request.POST['state'])
+            return HttpResponse("SUCCESS")
+
+        except UnidentifiedImageError:
+            return HttpResponse("Failure, unable to open image. Make sure the file is a valid image",
+                                status=400)
+
+        except (KeyError, NoExifDataError):
+            return HttpResponse("Failure, image had no geotag data",
+                                status=400)
+
+
 
 
 def pothole_geojson(request):

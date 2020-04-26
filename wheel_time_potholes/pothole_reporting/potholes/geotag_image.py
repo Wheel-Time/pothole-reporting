@@ -4,7 +4,7 @@ from PIL.ExifTags import TAGS
 from pothole_reporting.exceptions import NoExifDataError
 
 
-def create_pothole_by_image(image):
+def create_pothole_by_image(image, user_id, state):
     """
     create a new pothole using the geotagged data from an image
     return whether successful creation

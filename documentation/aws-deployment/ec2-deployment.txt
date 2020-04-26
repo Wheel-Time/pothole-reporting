@@ -21,7 +21,7 @@ The file /etc/nginx/sites-available/static should already be setup to match ngin
 
 7) Setup virtual environment: python3 -m venv venv
 
-8) Activate virtual environment: source env/bin/activate
+8) Activate virtual environment: source venv/bin/activate
 
 9) Install packages: sudo python3 -m pip install -r requirements.txt
 
