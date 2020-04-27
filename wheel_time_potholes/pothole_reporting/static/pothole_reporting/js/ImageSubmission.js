@@ -41,7 +41,12 @@ $("#submit-image-form").submit(function (event) {
       $("#submit-image-form")[0].reset();
     },
     error: function (data) {
-      alert(data.responseText);
+      if (data.responseText) {
+        alert(data.responseText);
+      }
+      else {
+        alert("Failure, unable to create a new pothole")
+      }
     },
   });
 });

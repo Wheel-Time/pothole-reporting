@@ -90,7 +90,6 @@ def submit_pothole(request):
         current_datetime = timezone.now()
 
         pothole = Pothole(lat=req['lat'], lon=req['lon'], create_date=current_datetime)
-        # TODO: Replace fk_user_id with SiteUser object that is attached to request
         p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=user_id, state=req['state'], submit_date=current_datetime)
 
         try:
@@ -119,7 +118,6 @@ def update_pothole(request):
         current_datetime = timezone.now()
 
         pothole = Pothole.objects.get(id=request.POST['pothole_id'])
-        # TODO: Replace fk_user_id with SiteUser object that is attached to request
         p_ledger = PotholeLedger(fk_pothole=pothole, fk_user_id=user_id, state=req['state'], submit_date=current_datetime)
 
         try:
@@ -153,16 +151,15 @@ def pothole_picture(request):
         try:
             create_pothole_by_image(image, user_id=user_id, state=request.POST['state'])
             return HttpResponse("SUCCESS")
-
         except UnidentifiedImageError:
             return HttpResponse("Failure, unable to open image. Make sure the file is a valid image",
                                 status=400)
-
         except (KeyError, NoExifDataError):
             return HttpResponse("Failure, image had no geotag data",
                                 status=400)
-
-
+        except Exception:
+            return HttpResponse("Failure, unable to create a new pothole",
+                                status=400)
 
 
 def pothole_geojson(request):
